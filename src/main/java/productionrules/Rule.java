@@ -1,16 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package productionrules;
 
 import agent.Robot.Action;
 
-/**
- *
- * @author ccf20
- */
 public class Rule {
 
     private Condition condition;
@@ -27,7 +18,8 @@ public class Rule {
     }
 
     public boolean eval(boolean[] characteristics) {
-        return condition.eval(characteristics);
+        return true;
+        // return condition.eval(characteristics);
     }
 
     public Action getAction() {

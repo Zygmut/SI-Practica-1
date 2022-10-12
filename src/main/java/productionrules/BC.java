@@ -1,17 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package productionrules;
 
 import java.util.LinkedList;
+import agent.Robot.Action;
 import java.util.Iterator;
 
-/**
- *
- * @author ccf20
- */
 public class BC {
     private LinkedList<Rule> contentRules;
 
@@ -19,7 +11,7 @@ public class BC {
         this.contentRules = new LinkedList<>();
     }
 
-    BC(LinkedList contentRules) {
+    BC(LinkedList<Rule> contentRules) {
         this.contentRules = contentRules;
     }
 

@@ -1,24 +1,14 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package gui;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.ArrayList;
-import java.util.Random;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
 public class Kitchen extends JPanel implements MouseListener {
-
 
     // Atributs propis del tauler
     private Casella[][] caselles;
@@ -54,7 +44,7 @@ public class Kitchen extends JPanel implements MouseListener {
 
     // Constructor del tauler
     public Kitchen(int n, int pixels, int borde) {
-//        this.dialogTablero = dT;
+        // this.dialogTablero = dT;
         this.setBackground(colorMarc);
         this.setBorder(BorderFactory.createLineBorder(colorBorde, 2));
         this.pixelsCostat = pixels;
@@ -89,15 +79,17 @@ public class Kitchen extends JPanel implements MouseListener {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.setColor(colorBorde);
-        g.drawRect(dimsBorde - 1, dimsBorde - 1, dimensions.width - (dimsBorde * 2) + 1, dimensions.height - (dimsBorde * 2) + 1);
-        g.drawRect(dimsBorde - 2, dimsBorde - 2, dimensions.width - (dimsBorde * 2) + 3, dimensions.height - (dimsBorde * 2) + 3);
+        g.drawRect(dimsBorde - 1, dimsBorde - 1, dimensions.width - (dimsBorde * 2) + 1,
+                dimensions.height - (dimsBorde * 2) + 1);
+        g.drawRect(dimsBorde - 2, dimsBorde - 2, dimensions.width - (dimsBorde * 2) + 3,
+                dimensions.height - (dimsBorde * 2) + 3);
 
         for (int i = 0; i < costat; i++) {
             for (int j = 0; j < costat; j++) {
                 caselles[i][j].paintComponent(g);
             }
         }
-        
+
     }
 
     public void reset() {
@@ -148,9 +140,9 @@ public class Kitchen extends JPanel implements MouseListener {
     private boolean comprobarValidez(int n) {
         return (n >= 0 && n < (this.pixelsCostat / this.costatCasella));
     }
-//
-//    public static ArrayList<Pieza> getPiezasFijas() {
-//        return piezasADibujar;
-//    }
+    //
+    // public static ArrayList<Pieza> getPiezasFijas() {
+    // return piezasADibujar;
+    // }
 
 }
