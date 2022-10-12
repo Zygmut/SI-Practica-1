@@ -3,6 +3,12 @@ package gui;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.JComponent;
 
 /*
@@ -18,7 +24,10 @@ public class Casella extends JComponent {
     private int x;
     private int y;
     private int costat;
-    private boolean fons;
+    private final boolean fons;
+    private BufferedImage obstacleImage = null;
+    private boolean isObstacle = true;
+    
 
     // Constructor de la casella
     public Casella(int i, int j, int costat, boolean fons, int borde) {
@@ -26,6 +35,13 @@ public class Casella extends JComponent {
         x = j * this.costat + borde;
         y = i * this.costat + borde;
         this.fons = fons;
+        
+        //Temporal
+        try {
+            obstacleImage = ImageIO.read(new File("images/box.png"));
+        } catch (IOException ex) {
+            Logger.getLogger(Casella.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     // Mètode que pinta una casella
@@ -38,8 +54,12 @@ public class Casella extends JComponent {
         } else {
             g2.setColor(colorFonsBlanc);
         }
-        g2.fill3DRect(x, y, costat, costat, true);
-        g2.setColor(Color.GRAY);
+        if(isObstacle){
+            
+        }else{
+            g2.fill3DRect(x, y, costat, costat, true);
+            g2.setColor(Color.GRAY); 
+        }
         g2.drawRect(x, y, costat, costat);
     }
 

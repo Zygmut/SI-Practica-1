@@ -24,6 +24,7 @@ public class RobotGui extends JFrame {
             Logger.getLogger(RobotGui.class.getName()).log(Level.SEVERE, null, ex);
         }
         this.setMinimumSize(this.getSize());
+        this.setLocationRelativeTo(null);
         this.setVisible(true);
     }
 
