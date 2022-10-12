@@ -1,8 +1,11 @@
 package com.hallwayrobot;
 
+import gui.RobotGui;
+
 public class Main {
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        RobotGui gui = new RobotGui();
+        gui.showGui();
     }
 }
