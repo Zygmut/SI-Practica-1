@@ -37,6 +37,18 @@ public class BC {
         return contentRules;
     }
 
+    public String toStringEvaluated(boolean[] characteristics) {
+        Iterator<Rule> it = contentRules.iterator();
+        String str = "";
+
+        while (it.hasNext()) {
+            Rule rule = it.next();
+            str += rule.toString() + ": " + rule.eval(characteristics) + "\n";
+        }
+        return str;
+
+    }
+
     @Override
     public String toString() {
         Iterator<Rule> it = contentRules.iterator();
