@@ -2,8 +2,8 @@ package productionrules;
 
 public class Condition {
 
-    LogicalExpresion logicalExpresion;
-    String label;
+    private LogicalExpresion logicalExpresion;
+    private String label;
 
     public Condition() {
         logicalExpresion = null;
