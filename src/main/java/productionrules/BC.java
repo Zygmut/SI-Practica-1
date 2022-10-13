@@ -7,11 +7,11 @@ import java.util.Iterator;
 public class BC {
     private LinkedList<Rule> contentRules;
 
-    BC() {
+    public BC() {
         this.contentRules = new LinkedList<>();
     }
 
-    BC(LinkedList<Rule> contentRules) {
+    public BC(LinkedList<Rule> contentRules) {
         this.contentRules = contentRules;
     }
 

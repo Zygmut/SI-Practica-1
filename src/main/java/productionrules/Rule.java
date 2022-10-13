@@ -7,12 +7,12 @@ public class Rule {
     private Condition condition;
     private Action action;
 
-    Rule() {
+    public Rule() {
         condition = new Condition();
         action = Action.values()[0];
     }
 
-    Rule(Condition condition, Action action) {
+    public Rule(Condition condition, Action action) {
         this.condition = condition;
         this.action = action;
     }
