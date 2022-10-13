@@ -17,8 +17,8 @@ public class Rule {
         this.action = action;
     }
 
-    public boolean eval(boolean[] characteristics) {
-        return condition.eval(characteristics);
+    public boolean eval() {
+        return condition.eval();
     }
 
     public Action getAction() {

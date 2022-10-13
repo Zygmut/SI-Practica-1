@@ -19,12 +19,12 @@ public class BC {
         contentRules.add(rule);
     }
 
-    public Action check(boolean[] characteristics) {
+    public Action check() {
         Iterator<Rule> it = contentRules.iterator();
 
         while (it.hasNext()) {
             Rule rule = it.next();
-            if (rule.eval(characteristics)) {
+            if (rule.eval()) {
                 return rule.getAction();
             }
 
@@ -37,13 +37,13 @@ public class BC {
         return contentRules;
     }
 
-    public String toStringEvaluated(boolean[] characteristics) {
+    public String toStringEvaluated() {
         Iterator<Rule> it = contentRules.iterator();
         String str = "";
 
         while (it.hasNext()) {
             Rule rule = it.next();
-            str += rule.toString() + ": " + rule.eval(characteristics) + "\n";
+            str += rule.toString() + ": " + rule.eval() + "\n";
         }
         return str;
 

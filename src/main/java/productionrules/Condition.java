@@ -1,26 +1,37 @@
 package productionrules;
 
+import java.util.LinkedList;
+
 public class Condition {
 
-    private LogicalExpresion logicalExpresion;
-    private String label;
+    private Characteristic[] characteristics;
 
     public Condition() {
-        logicalExpresion = null;
-        label = "None";
+        characteristics = null;
     }
 
-    public Condition(LogicalExpresion lg, String label){
-        this.logicalExpresion = lg;
-        this.label = label;
+    public Condition(Characteristic[] characteristics){
+        this.characteristics = characteristics;
     }
 
-    public boolean eval(boolean[] characteristics) {
-        return logicalExpresion.eval(characteristics);
+    public boolean eval() {
+        for(Characteristic c : characteristics){
+            if(!c.getValue()){
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
     public String toString() {
-        return label;
+        String repr = "";
+        for(int i = 0; i < characteristics.length; i++){
+            repr += characteristics[i];
+            if(i < characteristics.length - 1){
+                repr += " AND ";
+            }
+        }
+        return repr;
     }
 }
