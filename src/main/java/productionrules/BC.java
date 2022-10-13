@@ -33,6 +33,10 @@ public class BC {
         return null;
     }
 
+    public LinkedList<Rule> getContentRules() {
+        return contentRules;
+    }
+
     @Override
     public String toString() {
         Iterator<Rule> it = contentRules.iterator();

@@ -18,8 +18,7 @@ public class Rule {
     }
 
     public boolean eval(boolean[] characteristics) {
-        return true;
-        // return condition.eval(characteristics);
+        return condition.eval(characteristics);
     }
 
     public Action getAction() {
