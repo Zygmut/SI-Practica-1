@@ -1,5 +1,6 @@
 package agent;
 
+import java.awt.Point;
 import productionrules.BC;
 import productionrules.Characteristic;
 import productionrules.Condition;
@@ -42,19 +43,38 @@ public class Robot {
     
     //==========================================================================
     
-    private BC bc; 
+    
+    private final String[] LABELS = {"p1", "p2", "p3", "p4", "p5", "p6", "p7", "p8"};
+    private final Characteristic[] characteristics;
+    
+    private BC bc;
+    private Point position;
     
     public Robot(){
-        this.bc = new BC();
+        this.position = new Point();
+        
+        // Initialize characteristics to add labels
+        characteristics = new Characteristic[LABELS.length];
+        for (int i = 0; i < characteristics.length; i++) {
+            characteristics[i] = new Characteristic(LABELS[i]);
+        }
+        
+        initBC();
     }
     
-    public void addRule(Rule rule){
+    private void initBC(){
+        this.bc = new BC();
         
+        // ADD RULES
+        
+    }
+    
+    private void addRule(Rule rule){
         this.bc.addRule(rule);
     }
     
-    public void addRule(Characteristic[] characteristics, int[] indices, Action action){
-        this.bc.addRule(new Rule(new Condition(selectCharacteristics(characteristics, indices)), action));
+    private void addRule(int[] indices, Action action){
+        this.bc.addRule(new Rule(new Condition(selectCharacteristics(this.characteristics, indices)), action));
     }
     
     public Action checkBC(){
@@ -68,6 +88,19 @@ public class Robot {
     public String printEvaluatedBC(){
         return this.bc.toStringEvaluated();
     }
+
+    public Point getPosition() {
+        return position;
+    }
+
+    public void setPosition(Point position) {
+        this.position = position;
+    }
+    
+    public void setPosition(int x, int y) {
+        this.position = new Point(x, y);
+    }
+    
     
     
     //==========================================================================

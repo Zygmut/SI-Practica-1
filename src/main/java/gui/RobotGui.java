@@ -1,5 +1,6 @@
 package gui;
 
+import environment.Environment;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
@@ -13,7 +14,6 @@ public class RobotGui extends JFrame {
         super("Robot de cocina");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         initComponents();
-
     }
 
     public void showGui() {
@@ -31,6 +31,12 @@ public class RobotGui extends JFrame {
     private void initComponents() {
         kitchen = new Kitchen(10);
         this.add(kitchen);
+    }
+    
+    
+    
+    public void setMap(Environment env){
+        this.kitchen.setMap(env);
     }
 
 }

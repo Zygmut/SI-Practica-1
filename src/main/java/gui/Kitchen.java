@@ -1,5 +1,6 @@
 package gui;
 
+import environment.Environment;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -144,5 +145,9 @@ public class Kitchen extends JPanel implements MouseListener {
     // public static ArrayList<Pieza> getPiezasFijas() {
     // return piezasADibujar;
     // }
+
+    void setMap(Environment env) {
+        
+    }
 
 }
