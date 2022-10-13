@@ -2,6 +2,7 @@
 package environment;
 
 import agent.Robot;
+import java.awt.Point;
 
 
 public class Environment {
@@ -30,11 +31,28 @@ public class Environment {
     }
     
     public void runIteration(){
+        boolean[] perceptions = new boolean[8];
         //perceptions.from(robot, map);
-        //robot.processPerceptions(characteristics, perceptions); //update characteristics
+        //robot.processPerceptions(perceptions); //update characteristics
         //action = robot.check()
         //action.execute()
         //wait animation
+    }
+    
+    private boolean[] getPerceptions(){
+        boolean[] perceptions = new boolean[8];
+        
+        Point robot = this.robot.getPosition();
+        for (int i = -1; i < robot.x +1; i++) {
+            for (int j = 0; j < 10; j++) {
+                
+                
+            }
+            boolean perception = perceptions[i];
+            
+        }
+        
+        return perceptions;
     }
     
 }
