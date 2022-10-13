@@ -39,7 +39,7 @@ public class BC {
         String str = "";
 
         while (it.hasNext()) {
-            str += it.next() + "\n";
+            str += it.next().toString() + "\n";
         }
         return str;
     }
