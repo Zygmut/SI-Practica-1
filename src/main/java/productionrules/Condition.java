@@ -1,7 +1,5 @@
 package productionrules;
 
-import java.util.LinkedList;
-
 public class Condition {
 
     private Characteristic[] characteristics;
@@ -10,13 +8,13 @@ public class Condition {
         characteristics = null;
     }
 
-    public Condition(Characteristic[] characteristics){
+    public Condition(Characteristic[] characteristics) {
         this.characteristics = characteristics;
     }
 
     public boolean eval() {
-        for(Characteristic c : characteristics){
-            if(!c.getValue()){
+        for (Characteristic c : characteristics) {
+            if (!c.getValue()) {
                 return false;
             }
         }
@@ -26,9 +24,9 @@ public class Condition {
     @Override
     public String toString() {
         String repr = "";
-        for(int i = 0; i < characteristics.length; i++){
+        for (int i = 0; i < characteristics.length; i++) {
             repr += characteristics[i];
-            if(i < characteristics.length - 1){
+            if (i < characteristics.length - 1) {
                 repr += " AND ";
             }
         }

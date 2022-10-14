@@ -32,10 +32,8 @@ public class RobotGui extends JFrame {
         kitchen = new Kitchen(10);
         this.add(kitchen);
     }
-    
-    
-    
-    public void setMap(Environment env){
+
+    public void setMap(Environment env) {
         this.kitchen.setMap(env);
     }
 
