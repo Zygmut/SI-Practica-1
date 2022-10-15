@@ -3,12 +3,24 @@ package environment;
 
 import agent.Robot;
 import java.awt.Point;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+
 import utils.MutableBoolean;
 
-public class Environment {
+public class Environment implements Serializable {
 
     private MutableBoolean[][] map;
     private Robot robot;
+
+    public Environment() {
+        this.map = null;
+        this.robot = null;
+    }
 
     public Environment(int n) {
         this.map = new MutableBoolean[n][n];
@@ -26,7 +38,7 @@ public class Environment {
     public boolean isObstacle(int i, int j) {
         return this.map[i][j].is();
     }
-    
+
     public MutableBoolean getIsObstacleReference(int i, int j) {
         return this.map[i][j];
     }
@@ -74,4 +86,36 @@ public class Environment {
         return perceptions;
     }
 
+    public static Environment useMap(String path) {
+        String filePath = path;
+        if (!path.endsWith(".map")) {
+            filePath = path + ".map";
+        }
+
+        Environment env = null;
+        try {
+            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filePath));
+            env = (Environment) ois.readObject();
+            ois.close();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return env;
+    }
+
+    public void saveMap(String path) {
+        String filePath = path;
+        if (!path.endsWith(".map")) {
+            filePath = path + ".map";
+        }
+
+        try {
+            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filePath));
+            oos.writeObject(this);
+            oos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
