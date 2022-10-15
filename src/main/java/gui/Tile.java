@@ -4,17 +4,12 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.imageio.ImageIO;
 import javax.swing.JComponent;
 
 /*
 Classe que controla el funcionament d'una casella
  */
-public class Casella extends JComponent {
+public class Tile extends JComponent {
 
     // Constants de la casella
     private final Color colorFonsBlanc = new Color(225, 225, 225);
@@ -26,23 +21,35 @@ public class Casella extends JComponent {
     private int costat;
     private final boolean fons;
     private BufferedImage obstacleImage = null;
-    private boolean isObstacle = true;
+    private Boolean isObstacle = true;
     
 
     // Constructor de la casella
-    public Casella(int i, int j, int costat, boolean fons, int borde) {
+    public Tile(int i, int j, int costat, boolean fons, int borde) {
         this.costat = costat;
         x = j * this.costat + borde;
         y = i * this.costat + borde;
         this.fons = fons;
-        
-        //Temporal
-        try {
-            obstacleImage = ImageIO.read(new File("images/box.png"));
-        } catch (IOException ex) {
-            Logger.getLogger(Casella.class.getName()).log(Level.SEVERE, null, ex);
-        }
+       
     }
+
+    public BufferedImage getObstacleImage() {
+        return obstacleImage;
+    }
+
+    public void setObstacleImage(BufferedImage obstacleImage) {
+        this.obstacleImage = obstacleImage;
+    }
+
+    public Boolean isObstacle() {
+        return isObstacle;
+    }
+
+    public void setIsObstacle(Boolean isObstacle) {
+        this.isObstacle = isObstacle;
+    }
+    
+    
 
     // Mètode que pinta una casella
     @Override
@@ -55,7 +62,7 @@ public class Casella extends JComponent {
             g2.setColor(colorFonsBlanc);
         }
         if(isObstacle){
-            
+            g2.drawImage(obstacleImage, x, y, costat, costat, null);
         }else{
             g2.fill3DRect(x, y, costat, costat, true);
             g2.setColor(Color.GRAY); 

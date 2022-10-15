@@ -3,35 +3,40 @@ package environment;
 
 import agent.Robot;
 import java.awt.Point;
+import utils.MutableBoolean;
 
 public class Environment {
 
-    private Boolean[][] map;
+    private MutableBoolean[][] map;
     private Robot robot;
 
     public Environment(int n) {
-        this.map = new Boolean[n][n];
+        this.map = new MutableBoolean[n][n];
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[0].length; j++) {
-                map[i][j] = false;
+                map[i][j].setValue(false);
             }
         }
     }
 
-    public Environment(Boolean[][] map) {
+    public Environment(MutableBoolean[][] map) {
         this.map = map;
     }
 
-    public Boolean isObstacle(int i, int j) {
+    public boolean isObstacle(int i, int j) {
+        return this.map[i][j].is();
+    }
+    
+    public MutableBoolean getIsObstacle(int i, int j) {
         return this.map[i][j];
     }
 
     public void setObstacle(int i, int j, boolean value) {
-        this.map[i][j] = value;
+        this.map[i][j].setValue(value);
     }
 
     public void toggleObstacle(int i, int j) {
-        this.map[i][j] = !this.map[i][j];
+        this.map[i][j].toggle();
     }
 
     public void setRobot(Robot robot) {
@@ -57,7 +62,7 @@ public class Environment {
                 }
 
                 try {
-                    perceptions[idx] = map[y][x];
+                    perceptions[idx] = map[y][x].is();
                 } catch (ArrayIndexOutOfBoundsException e) {
                     // Map outer perimeter
                     perceptions[idx] = true;

@@ -12,7 +12,7 @@ import javax.swing.JPanel;
 public class Kitchen extends JPanel implements MouseListener {
 
     // Atributs propis del tauler
-    private Casella[][] caselles;
+    private Tile[][] caselles;
     private Color colorMarc = new Color(80, 80, 80);
     private Color colorBorde = new Color(200, 200, 200);
     private int costat;
@@ -29,12 +29,12 @@ public class Kitchen extends JPanel implements MouseListener {
         this.costat = n;
         this.costatCasella = pixelsCostat / costat;
         this.dimsBorde += (int) (((((float) pixelsCostat) / costat) - costatCasella) * costat / 2);
-        this.caselles = new Casella[costat][costat];
+        this.caselles = new Tile[costat][costat];
         boolean fons = false;
 
         for (int i = 0; i < costat; i++) {
             for (int j = 0; j < costat; j++) {
-                caselles[i][j] = new Casella(i, j, costatCasella, fons, dimsBorde);
+                caselles[i][j] = new Tile(i, j, costatCasella, fons, dimsBorde);
                 fons = !fons;
             }
             if (this.costat % 2 == 0) {
@@ -55,13 +55,13 @@ public class Kitchen extends JPanel implements MouseListener {
                 pixelsCostat + (2 * dimsBorde) + 1);
         this.costatCasella = pixelsCostat / costat;
         this.dimsBorde += (int) (((((float) pixelsCostat) / costat) - costatCasella) * costat / 2);
-        this.caselles = new Casella[costat][costat];
+        this.caselles = new Tile[costat][costat];
         boolean fons = false;
         this.addMouseListener(this);
 
         for (int i = 0; i < costat; i++) {
             for (int j = 0; j < costat; j++) {
-                caselles[i][j] = new Casella(i, j, costatCasella, fons, dimsBorde);
+                caselles[i][j] = new Tile(i, j, costatCasella, fons, dimsBorde);
                 fons = !fons;
             }
             if (this.costat % 2 == 0) {
