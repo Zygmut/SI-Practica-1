@@ -19,7 +19,7 @@ public class Kitchen extends JPanel implements MouseListener {
     private int costat;
     private int costatCasella;
     private int dimsBorde = 40;
-    private int pixelsCostat = 600;
+    private int pixelsCostat = 800;
     private Dimension dimensions = new Dimension(pixelsCostat + (2 * dimsBorde) + 1,
             pixelsCostat + (2 * dimsBorde) + 1);
 
@@ -71,7 +71,12 @@ public class Kitchen extends JPanel implements MouseListener {
 
     
     public void setMap(Environment env) {
-        
+        for (int i = 0; i < tiles.length; i++) {
+            for (int j = 0; j < tiles[0].length; j++) {
+                tiles[i][j].setIsObstacleReference(env.getIsObstacleReference(i, j));
+            }
+            
+        }
     }
     
     public void setObstacleImage(BufferedImage im){
@@ -99,7 +104,7 @@ public class Kitchen extends JPanel implements MouseListener {
 
         if(isValid(i) && isValid(j)){
             tiles[i][j].toggleIsObstacle();
-            this.refresh();
+            tiles[i][j].paintComponent(this.getGraphics());
         }
     }
 

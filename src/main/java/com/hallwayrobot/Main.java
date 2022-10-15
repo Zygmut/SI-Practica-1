@@ -9,11 +9,8 @@ public class Main {
     }
 
     public void start() {
-        
         RobotGui gui = new RobotGui();
         gui.showGui();
-
-        
     }
 
 }

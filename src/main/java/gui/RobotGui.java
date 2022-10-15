@@ -1,23 +1,33 @@
 package gui;
 
 import environment.Environment;
-import java.awt.image.BufferedImage;
+import java.awt.BorderLayout;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import utils.ImageLoader;
 
 public class RobotGui extends JFrame {
 
-    private final int INITIAL_SIZE = 10;
+    private final int INITIAL_SIZE = 20;
     
     private Kitchen kitchen;
+    private OptionsPanel options;
     
 
     public RobotGui() {
 
-        super("Robot de cocina");
+        // Appereance
+        super("Roomba Cleaner");
+        this.setIconImage(new ImageIcon("src/main/java/images/roomba32.png").getImage());
+        
+        // Layout
+        this.setLayout(new BorderLayout());
+        
+        // Functionality
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
+        
         initComponents();
     }
 
@@ -35,18 +45,30 @@ public class RobotGui extends JFrame {
 
     private void initComponents() {
         
-        BufferedImage im = ImageLoader.loadImage("src/main/java/images/box.png");
         
-        Environment env = new Environment(INITIAL_SIZE);
+        this.addNewKitchen(INITIAL_SIZE);
         
-        
-        kitchen = new Kitchen(INITIAL_SIZE, env);
-        kitchen.setObstacleImage(im);
-        this.add(kitchen);
+        this.options = new OptionsPanel(INITIAL_SIZE, this);
+        this.add(this.options, BorderLayout.WEST);
     }
 
     public void setMap(Environment env) {
         this.kitchen.setMap(env);
+    }
+    
+    public void addNewKitchen(int n){
+        
+        if(this.kitchen != null){
+            this.remove(this.kitchen);
+        }
+        
+        Environment env = new Environment(n);
+        
+        this.kitchen = new Kitchen(n, env);
+        this.add(kitchen, BorderLayout.CENTER);
+        
+        this.revalidate();
+        this.repaint();
     }
 
 }

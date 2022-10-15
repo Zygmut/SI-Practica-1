@@ -78,12 +78,12 @@ public class Tile extends JComponent {
             g2.setColor(colorFonsBlanc);
         }
         
+        g2.fill3DRect(x, y, costat, costat, true);
+        g2.setColor(Color.GRAY); 
+        g2.drawRect(x, y, costat, costat);
+        
         if(isObstacle()){
-            g2.drawImage(obstacleImage, x, y, costat, costat, null);
-        }else{
-            g2.fill3DRect(x, y, costat, costat, true);
-            g2.setColor(Color.GRAY); 
-            g2.drawRect(x, y, costat, costat);
+            g2.drawImage(obstacleImage, x + (int)(costat*0.05), y + (int)(costat*0.05), (int)(costat*0.90), (int)(costat*0.90), null);
         }
     }
 
