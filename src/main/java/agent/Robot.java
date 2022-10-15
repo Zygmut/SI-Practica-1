@@ -61,10 +61,34 @@ public class Robot {
         initBC();
     }
 
+    public Robot(int x, int y) {
+        this.position = new Point(x, y);
+
+        // Initialize characteristics to add labels
+        characteristics = new Characteristic[LABELS.length];
+        for (int i = 0; i < characteristics.length; i++) {
+            characteristics[i] = new Characteristic(LABELS[i]);
+        }
+
+        initBC();
+    }
+
     private void initBC() {
         this.bc = new BC();
 
         // TODO: Add rules
+    }
+
+    public Robot(Point position) {
+        this.position = position;
+
+        // Initialize characteristics to add labels
+        characteristics = new Characteristic[LABELS.length];
+        for (int i = 0; i < characteristics.length; i++) {
+            characteristics[i] = new Characteristic(LABELS[i]);
+        }
+
+        initBC();
     }
 
     private void addRule(Rule rule) {
