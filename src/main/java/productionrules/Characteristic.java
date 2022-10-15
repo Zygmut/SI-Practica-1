@@ -1,6 +1,8 @@
 package productionrules;
 
-public class Characteristic {
+import java.io.Serializable;
+
+public class Characteristic implements Serializable {
     private boolean value = true;
     private String label;
 

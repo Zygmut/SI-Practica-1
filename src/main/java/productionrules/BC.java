@@ -2,9 +2,11 @@ package productionrules;
 
 import java.util.LinkedList;
 import agent.Robot.Action;
+
+import java.io.Serializable;
 import java.util.Iterator;
 
-public class BC {
+public class BC implements Serializable{
     private LinkedList<Rule> contentRules;
 
     public BC() {
