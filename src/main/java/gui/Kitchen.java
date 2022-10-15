@@ -6,11 +6,12 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
-public class Kitchen extends JPanel implements MouseListener {
+public class Kitchen extends JPanel implements MouseListener, MouseMotionListener {
 
     // Atributs propis del tauler
     private Tile[][] tiles;
@@ -22,6 +23,7 @@ public class Kitchen extends JPanel implements MouseListener {
     private int pixelsCostat = 800;
     private Dimension dimensions = new Dimension(pixelsCostat + (2 * dimsBorde) + 1,
             pixelsCostat + (2 * dimsBorde) + 1);
+    private int buttonPressed = -1;
 
     // Constructor del tauler
     public Kitchen(int n, Environment env) {
@@ -33,6 +35,7 @@ public class Kitchen extends JPanel implements MouseListener {
         this.tiles = new Tile[costat][costat];
         boolean fons = false;
         this.addMouseListener(this);
+        this.addMouseMotionListener(this);
 
         for (int i = 0; i < costat; i++) {
             for (int j = 0; j < costat; j++) {
@@ -97,23 +100,16 @@ public class Kitchen extends JPanel implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        int x = e.getX();
-        int y = e.getY();
-        int i = getIndex(y);
-        int j = getIndex(x);
-
-        if(isValid(i) && isValid(j)){
-            tiles[i][j].toggleIsObstacle();
-            tiles[i][j].paintComponent(this.getGraphics());
-        }
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
+        this.buttonPressed = e.getButton();
     }
 
     @Override
-    public void mouseReleased(MouseEvent e) {
+    public void mouseReleased(MouseEvent e) {;
+        this.buttonPressed = -1;
     }
 
     @Override
@@ -131,6 +127,33 @@ public class Kitchen extends JPanel implements MouseListener {
 
     private boolean isValid(int n) {
         return (n >= 0 && n < (this.pixelsCostat / this.costatCasella));
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+        int x = e.getX();
+        int y = e.getY();
+        int i = getIndex(y);
+        int j = getIndex(x);
+        if(isValid(i) && isValid(j)){
+            Tile tile = tiles[i][j];
+            if(this.buttonPressed == MouseEvent.BUTTON1){
+                if(!tile.isObstacle()){
+                    tile.setIsObstacle(true);
+                    tile.paintComponent(this.getGraphics());
+                }
+            } else if(this.buttonPressed == MouseEvent.BUTTON3){
+                if(tile.isObstacle()){
+                    tile.setIsObstacle(false);
+                    tile.paintComponent(this.getGraphics());
+                }
+            }
+        }
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+
     }
 
 
