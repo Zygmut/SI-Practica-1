@@ -1,6 +1,7 @@
 package gui;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
@@ -25,7 +26,8 @@ import utils.ImageLoader;
 
 public class OptionsPanel extends JPanel {
 
-    private final int DIM_ICONO = 60;
+    private final int DIM_ICON = 60;
+    private final int DIM_ROBOT = 120;
     private final int ANCHO = 250;
     private final int ALTO = 20;
 
@@ -66,6 +68,8 @@ public class OptionsPanel extends JPanel {
         initInputDimTablero();
         //this.add(Box.createVerticalGlue());
         initInputs();
+        
+        initRobotSelector();
     }
     
     private BufferedImage[] loadImages(){
@@ -77,7 +81,6 @@ public class OptionsPanel extends JPanel {
     }
 
     private void initInputDimTablero() {
-        JRadioButton rbtn;
         int i = 0;
         JPanel panelBotones = new JPanel();
 
@@ -113,9 +116,7 @@ public class OptionsPanel extends JPanel {
         for (int i = 0; i < nPiezas; i++) {
             String nombrePieza = obstacleNames[i];
             entradas.add(crearInput(nombrePieza, 2, i));
-            if (i == nPiezas - 1) {
-                entradas.add(Box.createVerticalGlue());
-            } else {
+            if (i < nPiezas - 1) {
                 entradas.add(Box.createRigidArea(new Dimension(5, 20)));
             }
         }
@@ -180,11 +181,42 @@ public class OptionsPanel extends JPanel {
 
         return panelEntrada;
     }
+    
+    private void initRobotSelector() {
+        JPanel panelRobots = new JPanel();
+
+        panelRobots.setLayout(new BoxLayout(panelRobots, BoxLayout.Y_AXIS));
+
+        panelRobots.setBorder(
+                BorderFactory.createCompoundBorder(
+                        BorderFactory.createTitledBorder(
+                                BorderFactory.createLineBorder(Color.black, 2),
+                                "Robot"),
+                        BorderFactory.createEmptyBorder(10, 5, 15, 5)));
+        panelRobots.setLayout(new BoxLayout(panelRobots, BoxLayout.Y_AXIS));
+        
+        JPanel aux = new JPanel();
+        aux.setLayout(new BoxLayout(aux, BoxLayout.X_AXIS));
+        
+        Image robotImage = new ImageIcon(baseImagesPath + "roomba128" + extension).getImage().getScaledInstance(DIM_ROBOT, DIM_ROBOT, Image.SCALE_SMOOTH);
+        JLabel robotLabel = new JLabel(new ImageIcon(robotImage));
+        robotLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        
+        aux.add(Box.createHorizontalGlue());
+        aux.add(robotLabel);
+        aux.add(Box.createHorizontalGlue());
+        
+        panelRobots.add(Box.createVerticalGlue());
+        panelRobots.add(aux);
+        panelRobots.add(Box.createVerticalGlue());
+
+        this.add(panelRobots);
+    }
 
     private JLabel CrearEtiq(String str) {
         JLabel lab = new JLabel();
         ImageIcon baseImg = new ImageIcon(baseImagesPath + str.toLowerCase() + extension);
-        lab.setIcon(new ImageIcon(baseImg.getImage().getScaledInstance(DIM_ICONO, DIM_ICONO, Image.SCALE_SMOOTH)));
+        lab.setIcon(new ImageIcon(baseImg.getImage().getScaledInstance(DIM_ICON, DIM_ICON, Image.SCALE_SMOOTH)));
         return lab;
     }
 

@@ -9,7 +9,7 @@ import javax.swing.JFrame;
 
 public class RobotGui extends JFrame {
 
-    private final int INITIAL_SIZE = 20;
+    private final int INITIAL_SIZE = 15;
     
     private Kitchen kitchen;
     private OptionsPanel options;
