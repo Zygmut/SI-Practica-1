@@ -105,6 +105,7 @@ public class Kitchen extends JPanel implements MouseListener, MouseMotionListene
     @Override
     public void mousePressed(MouseEvent e) {
         this.buttonPressed = e.getButton();
+        updateObstacles(e);
     }
 
     @Override
@@ -131,6 +132,15 @@ public class Kitchen extends JPanel implements MouseListener, MouseMotionListene
 
     @Override
     public void mouseDragged(MouseEvent e) {
+        updateObstacles(e);
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+
+    }
+    
+    private void updateObstacles(MouseEvent e){
         int x = e.getX();
         int y = e.getY();
         int i = getIndex(y);
@@ -149,11 +159,6 @@ public class Kitchen extends JPanel implements MouseListener, MouseMotionListene
                 }
             }
         }
-    }
-
-    @Override
-    public void mouseMoved(MouseEvent e) {
-
     }
 
 
