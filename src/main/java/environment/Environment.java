@@ -14,7 +14,7 @@ public class Environment {
         this.map = new MutableBoolean[n][n];
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[0].length; j++) {
-                map[i][j].setValue(false);
+                map[i][j] = new MutableBoolean();
             }
         }
     }
@@ -27,7 +27,7 @@ public class Environment {
         return this.map[i][j].is();
     }
     
-    public MutableBoolean getIsObstacle(int i, int j) {
+    public MutableBoolean getIsObstacleReference(int i, int j) {
         return this.map[i][j];
     }
 

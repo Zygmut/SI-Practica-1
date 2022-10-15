@@ -1,8 +1,6 @@
 package com.hallwayrobot;
 
 import gui.RobotGui;
-import utils.ImageLoader;
-import java.awt.image.BufferedImage;
 
 public class Main {
 
@@ -11,11 +9,10 @@ public class Main {
     }
 
     public void start() {
-
+        
         RobotGui gui = new RobotGui();
         gui.showGui();
 
-        BufferedImage im = ImageLoader.loadImage("src/main/java/images/box.png");
         
     }
 

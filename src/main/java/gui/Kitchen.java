@@ -6,13 +6,14 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
 public class Kitchen extends JPanel implements MouseListener {
 
     // Atributs propis del tauler
-    private Tile[][] caselles;
+    private Tile[][] tiles;
     private Color colorMarc = new Color(80, 80, 80);
     private Color colorBorde = new Color(200, 200, 200);
     private int costat;
@@ -23,45 +24,20 @@ public class Kitchen extends JPanel implements MouseListener {
             pixelsCostat + (2 * dimsBorde) + 1);
 
     // Constructor del tauler
-    public Kitchen(int n) {
+    public Kitchen(int n, Environment env) {
         this.setBackground(colorMarc);
         this.setBorder(BorderFactory.createLineBorder(colorBorde, 2));
         this.costat = n;
         this.costatCasella = pixelsCostat / costat;
         this.dimsBorde += (int) (((((float) pixelsCostat) / costat) - costatCasella) * costat / 2);
-        this.caselles = new Tile[costat][costat];
-        boolean fons = false;
-
-        for (int i = 0; i < costat; i++) {
-            for (int j = 0; j < costat; j++) {
-                caselles[i][j] = new Tile(i, j, costatCasella, fons, dimsBorde);
-                fons = !fons;
-            }
-            if (this.costat % 2 == 0) {
-                fons = !fons;
-            }
-        }
-    }
-
-    // Constructor del tauler
-    public Kitchen(int n, int pixels, int borde) {
-        // this.dialogTablero = dT;
-        this.setBackground(colorMarc);
-        this.setBorder(BorderFactory.createLineBorder(colorBorde, 2));
-        this.pixelsCostat = pixels;
-        this.dimsBorde = borde;
-        this.costat = n;
-        this.dimensions = new Dimension(pixelsCostat + (2 * dimsBorde) + 1,
-                pixelsCostat + (2 * dimsBorde) + 1);
-        this.costatCasella = pixelsCostat / costat;
-        this.dimsBorde += (int) (((((float) pixelsCostat) / costat) - costatCasella) * costat / 2);
-        this.caselles = new Tile[costat][costat];
+        this.tiles = new Tile[costat][costat];
         boolean fons = false;
         this.addMouseListener(this);
 
         for (int i = 0; i < costat; i++) {
             for (int j = 0; j < costat; j++) {
-                caselles[i][j] = new Tile(i, j, costatCasella, fons, dimsBorde);
+                tiles[i][j] = new Tile(i, j, costatCasella, fons, dimsBorde);
+                tiles[i][j].setIsObstacleReference(env.getIsObstacleReference(i, j));
                 fons = !fons;
             }
             if (this.costat % 2 == 0) {
@@ -87,13 +63,22 @@ public class Kitchen extends JPanel implements MouseListener {
 
         for (int i = 0; i < costat; i++) {
             for (int j = 0; j < costat; j++) {
-                caselles[i][j].paintComponent(g);
+                tiles[i][j].paintComponent(g);
             }
         }
 
     }
 
-    public void reset() {
+    
+    public void setMap(Environment env) {
+        
+    }
+    
+    public void setObstacleImage(BufferedImage im){
+        Tile.setObstacleImage(im);
+    }
+    
+    public void refresh() {
         revalidate();
         repaint();
     }
@@ -109,9 +94,13 @@ public class Kitchen extends JPanel implements MouseListener {
     public void mouseClicked(MouseEvent e) {
         int x = e.getX();
         int y = e.getY();
-        int i = getI(y);
-        int j = getJ(x);
+        int i = getIndex(y);
+        int j = getIndex(x);
 
+        if(isValid(i) && isValid(j)){
+            tiles[i][j].toggleIsObstacle();
+            this.refresh();
+        }
     }
 
     @Override
@@ -130,24 +119,15 @@ public class Kitchen extends JPanel implements MouseListener {
     public void mouseExited(MouseEvent e) {
     }
 
-    private int getI(int y) {
-        return (y - dimsBorde) / this.costatCasella;
+    private int getIndex(int x) {
+        float val = (float)(x - dimsBorde) / this.costatCasella;
+        return val < 0 ? -1 : (int) val;
     }
 
-    private int getJ(int x) {
-        return (x - dimsBorde) / this.costatCasella;
-    }
-
-    private boolean comprobarValidez(int n) {
+    private boolean isValid(int n) {
         return (n >= 0 && n < (this.pixelsCostat / this.costatCasella));
     }
-    //
-    // public static ArrayList<Pieza> getPiezasFijas() {
-    // return piezasADibujar;
-    // }
 
-    void setMap(Environment env) {
-        
-    }
+
 
 }

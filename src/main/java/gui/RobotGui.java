@@ -1,13 +1,18 @@
 package gui;
 
 import environment.Environment;
+import java.awt.image.BufferedImage;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
+import utils.ImageLoader;
 
 public class RobotGui extends JFrame {
 
+    private final int INITIAL_SIZE = 10;
+    
     private Kitchen kitchen;
+    
 
     public RobotGui() {
 
@@ -29,7 +34,14 @@ public class RobotGui extends JFrame {
     }
 
     private void initComponents() {
-        kitchen = new Kitchen(10);
+        
+        BufferedImage im = ImageLoader.loadImage("src/main/java/images/box.png");
+        
+        Environment env = new Environment(INITIAL_SIZE);
+        
+        
+        kitchen = new Kitchen(INITIAL_SIZE, env);
+        kitchen.setObstacleImage(im);
         this.add(kitchen);
     }
 

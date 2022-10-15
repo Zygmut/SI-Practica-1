@@ -5,12 +5,16 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import javax.swing.JComponent;
+import utils.MutableBoolean;
 
 /*
 Classe que controla el funcionament d'una casella
  */
 public class Tile extends JComponent {
 
+    // Variables estaticas
+    private static BufferedImage currentImage;
+    
     // Constants de la casella
     private final Color colorFonsBlanc = new Color(225, 225, 225);
     private final Color colorFonsAltre = new Color(30, 30, 30);
@@ -21,7 +25,7 @@ public class Tile extends JComponent {
     private int costat;
     private final boolean fons;
     private BufferedImage obstacleImage = null;
-    private Boolean isObstacle = true;
+    private MutableBoolean isObstacle = new MutableBoolean(false);
     
 
     // Constructor de la casella
@@ -32,20 +36,32 @@ public class Tile extends JComponent {
         this.fons = fons;
        
     }
+    
+    public static void setObstacleImage(BufferedImage obstacleImage){
+        Tile.currentImage = obstacleImage;
+    }
 
     public BufferedImage getObstacleImage() {
         return obstacleImage;
     }
 
-    public void setObstacleImage(BufferedImage obstacleImage) {
-        this.obstacleImage = obstacleImage;
+    public void setIsObstacle(boolean value) {
+        this.isObstacle.setValue(value);
+        this.obstacleImage = Tile.currentImage;
+    }
+    
+    public void toggleIsObstacle(){
+        this.isObstacle.toggle();
+        if(this.isObstacle()){
+            this.obstacleImage = Tile.currentImage;
+        }
     }
 
-    public Boolean isObstacle() {
-        return isObstacle;
+    public boolean isObstacle() {
+        return isObstacle.is();
     }
 
-    public void setIsObstacle(Boolean isObstacle) {
+    public void setIsObstacleReference(MutableBoolean isObstacle) {
         this.isObstacle = isObstacle;
     }
     
@@ -61,13 +77,14 @@ public class Tile extends JComponent {
         } else {
             g2.setColor(colorFonsBlanc);
         }
-        if(isObstacle){
+        
+        if(isObstacle()){
             g2.drawImage(obstacleImage, x, y, costat, costat, null);
         }else{
             g2.fill3DRect(x, y, costat, costat, true);
             g2.setColor(Color.GRAY); 
+            g2.drawRect(x, y, costat, costat);
         }
-        g2.drawRect(x, y, costat, costat);
     }
 
 }
