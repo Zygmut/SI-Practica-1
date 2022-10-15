@@ -1,7 +1,8 @@
 package utils;
 
+import java.io.Serializable;
 
-public class MutableBoolean {
+public class MutableBoolean implements Serializable {
     private boolean value;
     
     public MutableBoolean(){
