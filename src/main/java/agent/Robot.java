@@ -1,12 +1,14 @@
 package agent;
 
 import java.awt.Point;
+import java.io.Serializable;
+
 import productionrules.BC;
 import productionrules.Characteristic;
 import productionrules.Condition;
 import productionrules.Rule;
 
-public class Robot {
+public class Robot implements Serializable{
 
     public enum Action {
 
