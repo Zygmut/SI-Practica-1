@@ -56,6 +56,11 @@ public class RobotDisplayer extends JComponent{
         position.y = (i * costat + borde)  + (int)(costat * 0.05);
     }
     
+    public boolean isOn(int i, int j){
+        Point robotTilesPosition = this.robot.getPosition();
+        return robotTilesPosition.x == i && robotTilesPosition.y == j;
+    }
+    
     @Override
     public void paintComponent(Graphics g){
         g.setColor(Color.red);

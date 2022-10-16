@@ -209,16 +209,20 @@ public class Kitchen extends JPanel implements MouseListener, MouseMotionListene
         int j = getIndex(x);
         if(isValid(i) && isValid(j)){
             Tile tile = tiles[i][j];
-            if(this.buttonPressed == MouseEvent.BUTTON1){
-                if(!tile.isObstacle()){
-                    tile.setIsObstacle(true);
-                    tile.paintComponent(this.getGraphics());
+            if(!this.robotDisplayer.isOn(i, j)){
+                if(this.buttonPressed == MouseEvent.BUTTON1){
+                    if(!tile.isObstacle()){
+                        tile.setIsObstacle(true);
+                        tile.paintComponent(this.getGraphics());
+                    }
+                } else if(this.buttonPressed == MouseEvent.BUTTON3){
+                    if(tile.isObstacle()){
+                        tile.setIsObstacle(false);
+                        tile.paintComponent(this.getGraphics());
+                    }
                 }
-            } else if(this.buttonPressed == MouseEvent.BUTTON3){
-                if(tile.isObstacle()){
-                    tile.setIsObstacle(false);
-                    tile.paintComponent(this.getGraphics());
-                }
+            }else{
+                
             }
         }
     }
