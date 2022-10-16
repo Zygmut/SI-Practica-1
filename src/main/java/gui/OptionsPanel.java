@@ -2,6 +2,7 @@ package gui;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
@@ -214,6 +215,7 @@ public class OptionsPanel extends JPanel {
         aux.setLayout(new BoxLayout(aux, BoxLayout.X_AXIS));
 
         robotLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        robotLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
         TransferHandler handler = new TransferHandler("icon");
         handler.setDragImage(roombaImage.getImage());
         robotLabel.setTransferHandler(handler);
