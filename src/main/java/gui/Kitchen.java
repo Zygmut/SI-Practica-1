@@ -75,6 +75,10 @@ public class Kitchen extends JPanel implements MouseListener, MouseMotionListene
                 }
             }
                 gui.setRobotActive(accept);
+                
+                robotDisplayer.temporalMoveRobot(-1,0);
+                robotDisplayer.move(Kitchen.this);
+                
                 return accept;
             }
             
@@ -209,7 +213,7 @@ public class Kitchen extends JPanel implements MouseListener, MouseMotionListene
         int j = getIndex(x);
         
         if(!isValid(i) || !isValid(j)) return;
-        if(this.robotDisplayer.isOn(i, j)) return;
+        if(this.robotDisplayer.isOnTile(i, j)) return;
         
         Tile tile = tiles[i][j];
         
