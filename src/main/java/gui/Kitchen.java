@@ -2,17 +2,24 @@ package gui;
 
 import environment.Environment;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Point;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
+import javax.swing.TransferHandler;
 
 public class Kitchen extends JPanel implements MouseListener, MouseMotionListener {
 
+    private final DataFlavor SUPPORTED_DATA_FLAVOR = DataFlavor.imageFlavor;
+    
     // Atributs propis del tauler
     private Tile[][] tiles;
     private Color colorMarc = new Color(80, 80, 80);
@@ -24,9 +31,13 @@ public class Kitchen extends JPanel implements MouseListener, MouseMotionListene
     private Dimension dimensions = new Dimension(pixelsCostat + (2 * dimsBorde) + 1,
             pixelsCostat + (2 * dimsBorde) + 1);
     private int buttonPressed = -1;
+    private RobotDisplayer robotDisplayer;
+    private RobotGui gui;
+    
 
     // Constructor del tauler
-    public Kitchen(int n, Environment env) {
+    public Kitchen(int n, RobotGui gui, Environment env, RobotDisplayer robotDisplayer) {
+        this.setLayout(null);
         this.setBackground(colorMarc);
         this.setBorder(BorderFactory.createLineBorder(colorBorde, 2));
         this.costat = n;
@@ -34,8 +45,41 @@ public class Kitchen extends JPanel implements MouseListener, MouseMotionListene
         this.dimsBorde += (int) (((((float) pixelsCostat) / costat) - costatCasella) * costat / 2);
         this.tiles = new Tile[costat][costat];
         boolean fons = false;
+        this.robotDisplayer = robotDisplayer;
+        this.add(this.robotDisplayer);
+        
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
+        
+        
+        //Set transfer handler to manage the drop on the panel for the robot
+        this.setTransferHandler(new TransferHandler("icon"){
+            
+            @Override
+            public boolean canImport(TransferHandler.TransferSupport support) {
+                return true; 
+            }
+
+            //Action to do when de robot is dropped here
+            @Override
+            public boolean importData(TransferHandler.TransferSupport support) {
+            boolean accept = false;
+            if (canImport(support)) {
+                try {
+                    Transferable t = support.getTransferable();
+                    Object value = t.getTransferData(support.getDataFlavors()[0]);
+                    Component component = support.getComponent();
+                    accept = setRobotLocation(support.getDropLocation().getDropPoint());
+                } catch (Exception exp) {
+                    exp.printStackTrace();
+                }
+            }
+                gui.setRobotActive(accept);
+                return accept;
+            }
+            
+            
+        });
 
         for (int i = 0; i < costat; i++) {
             for (int j = 0; j < costat; j++) {
@@ -47,6 +91,20 @@ public class Kitchen extends JPanel implements MouseListener, MouseMotionListene
                 fons = !fons;
             }
         }
+    }
+    
+    public boolean setRobotLocation(Point p){
+        int x = p.x;
+        int y = p.y;
+        int i = getIndex(y);
+        int j = getIndex(x);
+        if(isValid(i) && isValid(j)){
+            this.robotDisplayer.setActive(true);
+            this.robotDisplayer.setInitialTile(i, j, this.costatCasella, this.dimsBorde);
+            this.robotDisplayer.paintComponent(this.getGraphics());
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -68,6 +126,10 @@ public class Kitchen extends JPanel implements MouseListener, MouseMotionListene
             for (int j = 0; j < costat; j++) {
                 tiles[i][j].paintComponent(g);
             }
+        }
+        
+        if(robotDisplayer != null && robotDisplayer.isActive()){
+            robotDisplayer.paintComponent(g);
         }
 
     }

@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-
 import utils.MutableBoolean;
 
 public class Environment implements Serializable {
@@ -29,6 +28,7 @@ public class Environment implements Serializable {
                 map[i][j] = new MutableBoolean();
             }
         }
+        this.robot = new Robot();
     }
 
     public Environment(MutableBoolean[][] map) {
@@ -53,6 +53,10 @@ public class Environment implements Serializable {
 
     public void setRobot(Robot robot) {
         this.robot = robot;
+    }
+    
+    public Robot getRobot(){
+        return this.robot;
     }
 
     public void runIteration() {

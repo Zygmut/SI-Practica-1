@@ -10,6 +10,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import javax.swing.BorderFactory;
@@ -18,11 +20,14 @@ import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.TransferHandler;
 import utils.ImageLoader;
+import utils.MutableBoolean;
 
 public class OptionsPanel extends JPanel {
 
@@ -35,7 +40,11 @@ public class OptionsPanel extends JPanel {
     private final String baseImagesPath = "src/main/java/images/";
     private final String extension = ".png";
     private final BufferedImage[] images;
+    private final ImageIcon roombaImage;
+    private final ImageIcon roombaTransparentImage;
+    private final JLabel robotLabel;
     private final RobotGui gui;
+    private MutableBoolean isRobotActive;
 
     // private final Vista vista;
     private final Dimension dimensionInputs = new Dimension(145, 30);
@@ -53,14 +62,21 @@ public class OptionsPanel extends JPanel {
                 BorderFactory.createMatteBorder(0, 0, 0, 2, Color.black),
                 BorderFactory.createEmptyBorder(10, 15, 10, 15)));
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        
+
         images = loadImages();
+        this.roombaImage = new ImageIcon(new ImageIcon(baseImagesPath + "roomba128" + extension).getImage().getScaledInstance(DIM_ROBOT, DIM_ROBOT, Image.SCALE_SMOOTH));
+        this.roombaTransparentImage = new ImageIcon(new ImageIcon(baseImagesPath + "roombatransparent" + extension).getImage().getScaledInstance(DIM_ROBOT, DIM_ROBOT, Image.SCALE_SMOOTH));
+        this.robotLabel = new JLabel(roombaImage);
         
         this.initComponents();
-        
+
         inputDimsTablero.setText(Integer.toString(n));
         dimsTableroPrevias = n;
 
+    }
+
+    public void setRobotDisplayerActiveReference(MutableBoolean isActiveReference) {
+        this.isRobotActive = isActiveReference;
     }
 
     private void initComponents() {
@@ -68,13 +84,13 @@ public class OptionsPanel extends JPanel {
         initInputDimTablero();
         //this.add(Box.createVerticalGlue());
         initInputs();
-        
+
         initRobotSelector();
     }
-    
-    private BufferedImage[] loadImages(){
+
+    private BufferedImage[] loadImages() {
         BufferedImage[] images = new BufferedImage[obstacleNames.length];
-        for(int i = 0; i < images.length; i++){
+        for (int i = 0; i < images.length; i++) {
             images[i] = ImageLoader.loadImage(baseImagesPath + obstacleNames[i] + extension);
         }
         return images;
@@ -132,7 +148,7 @@ public class OptionsPanel extends JPanel {
         }
 
         panelEntrada.add(CrearEtiq(etiq));
-        
+
         panelEntrada.add(Box.createRigidArea(new Dimension(10, 5)));
 
         if (pos >= 0) {
@@ -146,12 +162,11 @@ public class OptionsPanel extends JPanel {
             jr.addActionListener(getChangeObstacleActionListener());
             this.groupbtn.add(jr);
             panelEntrada.add(jr);
-            
-            if(pos == 0){
+
+            if (pos == 0) {
                 jr.doClick();
             }
         }
-
 
         panelEntrada.add(Box.createHorizontalGlue());
 
@@ -159,7 +174,7 @@ public class OptionsPanel extends JPanel {
             JFormattedTextField entradaTexto = new JFormattedTextField();
             entradaTexto.setName(etiq);
             inputDimsTablero = entradaTexto;
-            
+
             entradaTexto.addActionListener((ActionEvent) -> {
                 this.changeKitchenSize();
             });
@@ -176,12 +191,12 @@ public class OptionsPanel extends JPanel {
             placeholder.changeAlpha(0.75f);
             placeholder.changeStyle(Font.ITALIC);
             panelEntrada.add(entradaTexto);
-            
+
         }
 
         return panelEntrada;
     }
-    
+
     private void initRobotSelector() {
         JPanel panelRobots = new JPanel();
 
@@ -194,18 +209,44 @@ public class OptionsPanel extends JPanel {
                                 "Robot"),
                         BorderFactory.createEmptyBorder(10, 5, 15, 5)));
         panelRobots.setLayout(new BoxLayout(panelRobots, BoxLayout.Y_AXIS));
-        
+
         JPanel aux = new JPanel();
         aux.setLayout(new BoxLayout(aux, BoxLayout.X_AXIS));
-        
-        Image robotImage = new ImageIcon(baseImagesPath + "roomba128" + extension).getImage().getScaledInstance(DIM_ROBOT, DIM_ROBOT, Image.SCALE_SMOOTH);
-        JLabel robotLabel = new JLabel(new ImageIcon(robotImage));
+
         robotLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        
+        TransferHandler handler = new TransferHandler("icon");
+        handler.setDragImage(roombaImage.getImage());
+        robotLabel.setTransferHandler(handler);
+
+        //Mouse adapter for handle drag and drop 
+        robotLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                JComponent c = (JComponent) e.getSource();
+                JLabel lab = ((JLabel) c);
+                if (lab.getIcon() == roombaImage) {
+                    TransferHandler handler = c.getTransferHandler();
+                    handler.exportAsDrag(c, e, TransferHandler.COPY);
+                }
+            }
+
+            @Override
+            public void mouseClicked(MouseEvent e){
+                JComponent c = (JComponent) e.getSource();
+                JLabel lab = ((JLabel) c);
+                if(lab.getIcon() == roombaTransparentImage){
+                    lab.setIcon(roombaImage);
+                    isRobotActive.setValue(false);
+                    gui.repaint();
+                }
+            }
+
+        });
+
         aux.add(Box.createHorizontalGlue());
         aux.add(robotLabel);
         aux.add(Box.createHorizontalGlue());
-        
+
         panelRobots.add(Box.createVerticalGlue());
         panelRobots.add(aux);
         panelRobots.add(Box.createVerticalGlue());
@@ -226,6 +267,14 @@ public class OptionsPanel extends JPanel {
         return new Dimension(ANCHO, ALTO);
     }
 
+    void setRobotActive(boolean isActive) {
+        if(isActive){
+            robotLabel.setIcon(roombaTransparentImage);
+        }else{
+            robotLabel.setIcon(roombaImage);
+        }
+    }
+
     class InputListener implements KeyListener {
 
         private JFormattedTextField input;
@@ -243,7 +292,7 @@ public class OptionsPanel extends JPanel {
                 if (((c < '0') || (c > '9')) && (c != KeyEvent.VK_BACK_SPACE) || input.getText().length() == lim) {
                     e.consume();
                 }
-                
+
             }
         }
 
@@ -280,7 +329,7 @@ public class OptionsPanel extends JPanel {
         inputDimsTablero.setEnabled(estado);
         for (int i = 0; i < botones.size(); i++) {
             botones.get(i).setEnabled(estado);
-            
+
         }
     }
 

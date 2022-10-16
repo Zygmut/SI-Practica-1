@@ -46,10 +46,11 @@ public class RobotGui extends JFrame {
     private void initComponents() {
         
         
-        this.addNewKitchen(INITIAL_SIZE);
-        
         this.options = new OptionsPanel(INITIAL_SIZE, this);
         this.add(this.options, BorderLayout.WEST);
+        
+        this.addNewKitchen(INITIAL_SIZE);
+        
     }
 
     public void setMap(Environment env) {
@@ -63,12 +64,20 @@ public class RobotGui extends JFrame {
         }
         
         Environment env = new Environment(n);
+        RobotDisplayer robotDisplayer = new RobotDisplayer(env.getRobot());
         
-        this.kitchen = new Kitchen(n, env);
+        this.options.setRobotDisplayerActiveReference(robotDisplayer.getIsActiveReference());
+        
+        this.kitchen = new Kitchen(n, this, env, robotDisplayer);
         this.add(kitchen, BorderLayout.CENTER);
         
         this.revalidate();
         this.repaint();
+        
+    }
+    
+    public void setRobotActive(boolean value){
+        this.options.setRobotActive(value);
     }
 
 }
