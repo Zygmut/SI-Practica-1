@@ -70,6 +70,7 @@ public class Tile extends JComponent {
     // Mètode que pinta una casella
     @Override
     public void paintComponent(Graphics g) {
+        //super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
         super.paintComponent(g2);
         if (fons) {

@@ -28,8 +28,8 @@ public class RobotDisplayer extends JComponent {
     private final int incX = 2;
     private final int incY = 2;
     private final int incAngle = 2;
-    private int prevIncX = 0;
-    private int prevIncY = -1 * incY;
+    private int prevPosX;
+    private int prevPosY;
     private final BufferedImage image;
     private Point position;
     private MutableBoolean active;
@@ -42,6 +42,8 @@ public class RobotDisplayer extends JComponent {
     public RobotDisplayer(Robot robot) {
         this.robot = robot;
         this.position = new Point(-1, -1);
+        this.prevPosX = this.position.x; 
+        this.prevPosY = this.position.y;
         this.active = new MutableBoolean(false);
         this.image = ImageLoader.loadImage("src/main/java/images/roomba128.png");
     }
@@ -62,8 +64,14 @@ public class RobotDisplayer extends JComponent {
         this.robot.setPosition(i, j);
         this.width = (int) (costat * 0.9);
         this.position = this.calculatePositionFromTileIndices(i, j, costat, borde);
+        this.prevPosX = this.position.x; 
+        this.prevPosY = this.position.y;
         this.costat = costat;
         this.borde = borde;
+    }
+    
+    public Point getTileIndices(){
+        return this.robot.getPosition();
     }
 
     public Point calculatePositionFromTileIndices(int i, int j, int costat, int borde) {
@@ -89,8 +97,11 @@ public class RobotDisplayer extends JComponent {
         int currentIncX = incX * multiplierX;
         int currentIncY = incY * multiplierY;
        
-        this.rotate(kitchen, currentIncX, currentIncY);
+        this.rotate(kitchen, this.robot.getPosition().x, this.robot.getPosition().y);
 
+        this.prevPosX = this.robot.getPosition().x;
+        this.prevPosY = this.robot.getPosition().y;
+        
         while (this.position.x != robotCoordinates.x || this.position.y != robotCoordinates.y) {
             this.position.x += currentIncX;
             this.position.y += currentIncY;
@@ -115,20 +126,32 @@ public class RobotDisplayer extends JComponent {
                 Logger.getLogger(RobotDisplayer.class.getName()).log(Level.SEVERE, null, ex);
             }
 
-            kitchen.repaint();
+            kitchen.repaintRobotAndTiles();
         }
 
     }
     
-    private void rotate(Kitchen kitchen, int currentIncX, int currentIncY){
+    private void rotate(Kitchen kitchen, int targetPosX, int targetPosY){
         
         
-        int finalAngle = getFinalAngle(currentIncX, currentIncY);
+        int finalAngle = getFinalAngle(targetPosX, targetPosY);
         
-        this.prevIncX = currentIncX;
-        this.prevIncY = currentIncY;
+        int negFinalAngle = finalAngle - 360;
         
-        int multiplier = this.rotationAngle < finalAngle ? 1 : -1;
+        System.out.println(finalAngle);
+        System.out.println(negFinalAngle);
+        System.out.println(this.rotationAngle);
+        
+        finalAngle = Math.abs(finalAngle - this.rotationAngle) <= Math.abs(negFinalAngle - this.rotationAngle)
+                ? finalAngle
+                : negFinalAngle;
+        System.out.println(finalAngle);
+        
+        if(finalAngle == 0 && this.rotationAngle > 180){
+            finalAngle = 360;
+        }
+        
+        int multiplier = this.rotationAngle <= finalAngle ? 1 : -1;
         
         int currentIncAngle = multiplier * this.incAngle;
         
@@ -149,36 +172,43 @@ public class RobotDisplayer extends JComponent {
                 Logger.getLogger(RobotDisplayer.class.getName()).log(Level.SEVERE, null, ex);
             }
 
-            kitchen.repaint();
+            kitchen.repaintRobotAndTiles();
+        }
+        
+        if(this.rotationAngle < 0){
+            this.rotationAngle += 360;
+        }
+        if(this.rotationAngle >= 360){
+            this.rotationAngle -= 360;
         }
     }
     
-    private int getFinalAngle(int currentIncX, int currentIncY){
+    private int getFinalAngle(int targetPosX, int targetPosY){
         
-
-        if(currentIncX < this.prevIncX){
+        if(targetPosX < this.prevPosX){
             return 0;
         }
         
-        if(currentIncX > this.prevIncX){
-            return 90;
-        }
-        
-        if(currentIncY < this.prevIncY){
-            return 270;
-        }
-        
-        if(currentIncY > this.prevIncY){
+        if(targetPosX > this.prevPosX){
             return 180;
         }
         
+        if(targetPosY < this.prevPosY){
+            return 270;
+        }
         
-        return 0;
+        if(targetPosY > this.prevPosY){
+            return 90;
+        }
+        
+        
+        return this.rotationAngle;
         
     }
 
     @Override
     public void paintComponent(Graphics g1) {
+        //super.paintComponent(g1);
         Graphics2D g = (Graphics2D)g1;
         g.setColor(Color.red);
 
