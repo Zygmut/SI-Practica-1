@@ -2,7 +2,6 @@ package agent;
 
 import java.awt.Point;
 import java.io.Serializable;
-
 import productionrules.BC;
 import productionrules.Characteristic;
 import productionrules.Condition;
@@ -52,7 +51,7 @@ public class Robot implements Serializable{
     private Point position;
 
     public Robot() {
-        this.position = new Point();
+        this.position = new Point(-1, -1);
 
         // Initialize characteristics to add labels
         characteristics = new Characteristic[LABELS.length];

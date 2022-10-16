@@ -79,6 +79,21 @@ public class Kitchen extends JPanel implements MouseListener, MouseMotionListene
                 robotDisplayer.temporalMoveRobot(-1,0);
                 robotDisplayer.move(Kitchen.this);
                 
+                robotDisplayer.temporalMoveRobot(-1,0);
+                robotDisplayer.move(Kitchen.this);
+                
+                robotDisplayer.temporalMoveRobot(0,1);
+                robotDisplayer.move(Kitchen.this);
+                
+                robotDisplayer.temporalMoveRobot(0,1);
+                robotDisplayer.move(Kitchen.this);
+                
+                robotDisplayer.temporalMoveRobot(0,-1);
+                robotDisplayer.move(Kitchen.this);
+                
+                robotDisplayer.temporalMoveRobot(0,-1);
+                robotDisplayer.move(Kitchen.this);
+                
                 return accept;
             }
             
