@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -34,6 +35,9 @@ public class Kitchen extends JPanel implements MouseListener, MouseMotionListene
     private int buttonPressed = -1;
     private RobotDisplayer robotDisplayer;
     private RobotGui gui;
+    private BufferedImage starterImage = null;
+    private Graphics2D gAux = null;
+    private BufferedImage biAux = null;
 
     // Constructor del tauler
     public Kitchen(int n, RobotGui gui, Environment env, RobotDisplayer robotDisplayer) {
@@ -45,6 +49,7 @@ public class Kitchen extends JPanel implements MouseListener, MouseMotionListene
         this.tiles = new Tile[costat][costat];
         boolean fons = false;
         this.robotDisplayer = robotDisplayer;
+//        this.setDoubleBuffered(false);
 
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
@@ -151,7 +156,7 @@ public class Kitchen extends JPanel implements MouseListener, MouseMotionListene
         if (isValid(i) && isValid(j)) {
             this.robotDisplayer.setActive(true);
             this.robotDisplayer.setInitialTile(i, j, this.costatCasella, this.dimsBorde);
-            this.robotDisplayer.paintComponent(this.getGraphics());
+            this.repaint();
             return true;
         }
         return false;
@@ -165,22 +170,37 @@ public class Kitchen extends JPanel implements MouseListener, MouseMotionListene
     // Pinta el tauler
     @Override
     public void paintComponent(Graphics g) {
-        //super.paintComponent(g);
-        g.setColor(colorBorde);
-        g.drawRect(dimsBorde - 1, dimsBorde - 1, dimensions.width - (dimsBorde * 2) + 1,
-                dimensions.height - (dimsBorde * 2) + 1);
-        g.drawRect(dimsBorde - 2, dimsBorde - 2, dimensions.width - (dimsBorde * 2) + 3,
-                dimensions.height - (dimsBorde * 2) + 3);
-
+        super.paintComponent(g);
+        
+        if (starterImage == null) {
+            starterImage = new BufferedImage(dimensions.width, dimensions.height, BufferedImage.TYPE_INT_ARGB);
+            gAux = (Graphics2D) starterImage.getGraphics();
+            gAux.setColor(colorBorde);
+            gAux.drawRect(dimsBorde - 1, dimsBorde - 1, dimensions.width - (dimsBorde * 2) + 1,
+                    dimensions.height - (dimsBorde * 2) + 1);
+            gAux.drawRect(dimsBorde - 2, dimsBorde - 2, dimensions.width - (dimsBorde * 2) + 3,
+                    dimensions.height - (dimsBorde * 2) + 3);
+            
+        }
+        
         for (int i = 0; i < costat; i++) {
             for (int j = 0; j < costat; j++) {
-                tiles[i][j].paintComponent(g);
+                tiles[i][j].paintComponent(gAux);
             }
         }
+        
+        biAux = clone(starterImage);
+        Graphics2D gbiAux = (Graphics2D) biAux.getGraphics();
 
         if (robotDisplayer != null && robotDisplayer.isActive()) {
-            robotDisplayer.paintComponent(g);
+            robotDisplayer.paintComponent(gbiAux);
         }
+        
+        
+        gbiAux.dispose();
+        g.drawImage(biAux, 0, 0, this);
+        
+        
 
     }
 
@@ -269,36 +289,45 @@ public class Kitchen extends JPanel implements MouseListener, MouseMotionListene
 
         if (this.buttonPressed == MouseEvent.BUTTON1 && !tile.isObstacle()) {
             tile.setIsObstacle(true);
-            tile.paintComponent(this.getGraphics());
-            return;
+            tile.notifyChange();
         }
 
         if (this.buttonPressed == MouseEvent.BUTTON3 && tile.isObstacle()) {
             tile.setIsObstacle(false);
-            tile.paintComponent(this.getGraphics());
-            return;
+            tile.notifyChange();
+            
         }
-    }
-
-    public void repaintRobotAndTiles() {
         this.repaint();
-//        Point center = this.robotDisplayer.getTileIndices();
-//        int[][] offset = {
-//            {0, 0},
-//            {1, 0},
-//            {0, 1},
-//            {-1,0},
-//            {0,-1}
-//        };
-//        
-//        for(int i = 0; i < offset.length; i++){
-//            int x = center.x + offset[i][0];
-//            int y = center.y + offset[i][1];
-//            if(!isValid(x) || !isValid(y)) continue;
-//            this.tiles[x][y].paintComponent(this.getGraphics());
-//        }
-//        
-//        this.robotDisplayer.paintComponent(this.getGraphics());
     }
 
+    
+    public void repaintRobotAndTiles() {
+        Point center = this.robotDisplayer.getTileIndices();
+        int[][] offset = {
+            {0, 0},
+            {1, 0},
+            {0, 1},
+            {-1,0},
+            {0,-1}
+        };
+
+        for(int i = 0; i < offset.length; i++){
+            int x = center.x + offset[i][0];
+            int y = center.y + offset[i][1];
+            if(!isValid(x) || !isValid(y)) continue;
+            this.tiles[x][y].notifyChange();
+        }
+
+        this.repaint();
+    }
+
+    private BufferedImage clone(BufferedImage image) {
+        BufferedImage clon = new BufferedImage(image.getWidth(),
+                image.getHeight(), image.getType());
+        Graphics2D g2d = clon.createGraphics();
+        g2d.drawImage(image, 0, 0, null);
+        g2d.dispose();
+        return clon;
+    }
+    
 }

@@ -10,7 +10,7 @@ import utils.MutableBoolean;
 /*
 Classe que controla el funcionament d'una casella
  */
-public class Tile extends JComponent {
+public class Tile extends JComponent{
 
     // Variables estaticas
     private static BufferedImage currentImage;
@@ -26,6 +26,8 @@ public class Tile extends JComponent {
     private final boolean fons;
     private BufferedImage obstacleImage = null;
     private MutableBoolean isObstacle = new MutableBoolean(false);
+    private boolean needsToBePainted = true;
+    
     
 
     // Constructor de la casella
@@ -65,26 +67,31 @@ public class Tile extends JComponent {
         this.isObstacle = isObstacle;
     }
     
+    public void notifyChange(){
+        this.needsToBePainted = true;
+    }
     
-
+    
     // Mètode que pinta una casella
     @Override
     public void paintComponent(Graphics g) {
-        //super.paintComponent(g);
-        Graphics2D g2 = (Graphics2D) g;
-        super.paintComponent(g2);
-        if (fons) {
-            g2.setColor(colorFonsAltre);
-        } else {
-            g2.setColor(colorFonsBlanc);
-        }
-        
-        g2.fill3DRect(x, y, costat, costat, true);
-        g2.setColor(Color.GRAY); 
-        g2.drawRect(x, y, costat, costat);
-        
-        if(isObstacle()){
-            g2.drawImage(obstacleImage, x + (int)(costat*0.05), y + (int)(costat*0.05), (int)(costat*0.90), (int)(costat*0.90), null);
+        if(needsToBePainted){
+            Graphics2D g2 = (Graphics2D) g;
+            if (fons) {
+                g2.setColor(colorFonsAltre);
+            } else {
+                g2.setColor(colorFonsBlanc);
+            }
+
+            g2.fill3DRect(x, y, costat, costat, true);
+            g2.setColor(Color.GRAY); 
+            g2.drawRect(x, y, costat, costat);
+
+            if(isObstacle()){
+                g2.drawImage(obstacleImage, x + (int)(costat*0.05), y + (int)(costat*0.05), (int)(costat*0.90), (int)(costat*0.90), null);
+            }
+            needsToBePainted = false;
+            System.out.println("hi");
         }
     }
 
