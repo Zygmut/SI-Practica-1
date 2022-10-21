@@ -1,31 +1,29 @@
 package productionrules;
 
 import java.util.LinkedList;
-import agent.Robot.Action;
 
-import java.io.Serializable;
 import java.util.Iterator;
 
-public class BC implements Serializable{
-    private LinkedList<Rule> contentRules;
+public class BC<T> {
+    private LinkedList<Rule<T>> contentRules;
 
     public BC() {
         this.contentRules = new LinkedList<>();
     }
 
-    public BC(LinkedList<Rule> contentRules) {
+    public BC(LinkedList<Rule<T>> contentRules) {
         this.contentRules = contentRules;
     }
 
-    public void addRule(Rule rule) {
+    public void addRule(Rule<T> rule) {
         contentRules.add(rule);
     }
 
-    public Action check() {
-        Iterator<Rule> it = contentRules.iterator();
+    public T check() {
+        Iterator<Rule<T>> it = contentRules.iterator();
 
         while (it.hasNext()) {
-            Rule rule = it.next();
+            Rule<T> rule = it.next();
             if (rule.eval()) {
                 return rule.getAction();
             }
@@ -35,16 +33,16 @@ public class BC implements Serializable{
         return null;
     }
 
-    public LinkedList<Rule> getContentRules() {
+    public LinkedList<Rule<T>> getContentRules() {
         return contentRules;
     }
 
     public String toStringEvaluated() {
-        Iterator<Rule> it = contentRules.iterator();
+        Iterator<Rule<T>> it = contentRules.iterator();
         String str = "";
 
         while (it.hasNext()) {
-            Rule rule = it.next();
+            Rule<T> rule = it.next();
             str += rule.toString() + ": " + rule.eval() + "\n";
         }
         return str;
@@ -53,7 +51,7 @@ public class BC implements Serializable{
 
     @Override
     public String toString() {
-        Iterator<Rule> it = contentRules.iterator();
+        Iterator<Rule<T>> it = contentRules.iterator();
         String str = "";
 
         while (it.hasNext()) {

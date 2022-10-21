@@ -1,6 +1,6 @@
 package productionrules;
 
-public class Condition {
+public class Condition  {
 
     private Characteristic[] characteristics;
 

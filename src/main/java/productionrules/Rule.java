@@ -1,18 +1,16 @@
 package productionrules;
 
-import agent.Robot.Action;
-
-public class Rule {
+public class Rule<T> {
 
     private Condition condition;
-    private Action action;
+    private T action;
 
     public Rule() {
         condition = new Condition();
-        action = Action.values()[0];
+        action = null;
     }
 
-    public Rule(Condition condition, Action action) {
+    public Rule(Condition condition, T action) {
         this.condition = condition;
         this.action = action;
     }
@@ -21,12 +19,15 @@ public class Rule {
         return condition.eval();
     }
 
-    public Action getAction() {
+    public T getAction() {
         return action;
     }
 
     @Override
     public String toString() {
+        if (action == null){
+            return condition.toString() + " -> pass";
+        }
         return condition.toString() + " -> " + action.toString();
     }
 
