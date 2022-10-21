@@ -1,5 +1,5 @@
 package agent;
 
 public interface Executable {
-    public void execute();
+    public void execute(Object obj);
 }

@@ -1,7 +1,6 @@
 package productionrules;
 
 import java.util.LinkedList;
-
 import java.util.Iterator;
 
 public class BC<T> {
@@ -15,7 +14,7 @@ public class BC<T> {
         this.contentRules = contentRules;
     }
 
-    public void addRule(Rule<T> rule) {
+    public void addProdRule(Rule<T> rule) {
         contentRules.add(rule);
     }
 

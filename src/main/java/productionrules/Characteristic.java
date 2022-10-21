@@ -1,6 +1,5 @@
 package productionrules;
 
-
 public class Characteristic {
     private boolean value = true;
     private String label;
@@ -13,13 +12,13 @@ public class Characteristic {
         return value;
     }
 
-    public void setValue(boolean value){
+    public void setValue(boolean value) {
         this.value = value;
     }
 
     @Override
     public String toString() {
-        return label;
+        return label + ": " + value;
     }
 
 }

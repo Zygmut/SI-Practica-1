@@ -63,8 +63,7 @@ public class Environment<T> implements Serializable {
     @SuppressWarnings("unchecked")
     public void runIteration() {
         ((GridAgent<Executable>) agent).processPerceptions(getPerceptions(agent));
-        ((GridAgent<Executable>) agent).checkBC().execute();
-
+        ((GridAgent<Executable>) agent).checkBC().execute((GridAgent<Executable>) agent);
 
         // TODO: wait animation
     }

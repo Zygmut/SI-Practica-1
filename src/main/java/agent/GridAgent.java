@@ -12,12 +12,22 @@ public abstract class GridAgent<T> {
     protected BC<T> bc;
     protected Point position;
 
-    public void addRule(Rule<T> rule) {
-        this.bc.addRule(rule);
+    public void addProdRule(Rule<T> rule) {
+        this.bc.addProdRule(rule);
     }
 
-    public void addRule(int[] indices, T action) {
-        this.bc.addRule(new Rule<T>(new Condition(selectCharacteristics(this.characteristics, indices)), action));
+    public void addProdRule(int[] indices, T action) {
+        this.bc.addProdRule(new Rule<T>(new Condition(selectCharacteristics(this.characteristics, indices)), action));
+    }
+
+    public void addProdRule(int[] characIdx, Characteristic[] internalStates, T action) {
+        Characteristic[] characteristics = new Characteristic[characIdx.length + internalStates.length];
+
+        System.arraycopy(selectCharacteristics(this.characteristics, characIdx), 0, characteristics, 0,
+                characIdx.length);
+        System.arraycopy(internalStates, 0, characteristics, characIdx.length, internalStates.length);
+
+        this.bc.addProdRule(new Rule<T>(new Condition(characteristics), action));
     }
 
     public T checkBC() {
@@ -33,10 +43,9 @@ public abstract class GridAgent<T> {
     }
 
     public void processPerceptions(boolean[] perceptions) {
-        ;
-    }
+    };
 
-    public void setCharacteristics(Characteristic[] characteristics){
+    public void setCharacteristics(Characteristic[] characteristics) {
         this.characteristics = characteristics;
     }
 
