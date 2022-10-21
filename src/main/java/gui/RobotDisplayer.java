@@ -11,8 +11,9 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import javax.swing.JComponent;
 import utils.ImageLoader;
 import utils.MutableBoolean;
@@ -22,6 +23,19 @@ import utils.MutableBoolean;
  * @author ccf20
  */
 public class RobotDisplayer extends JComponent {
+    
+    class Timer {
+            private static final ScheduledExecutorService scheduledThreadPoolExecutor = Executors.newScheduledThreadPool(10);
+    
+            private static void doPause(int ms) {
+                try {
+                    scheduledThreadPoolExecutor.schedule(() -> {
+                    }, ms, TimeUnit.MILLISECONDS).get();
+                } catch (Exception e) {
+                    throw new RuntimeException();
+                }
+            }
+        }
 
     private final int sleep_millis = 10;
     private final Robot robot;
@@ -64,7 +78,7 @@ public class RobotDisplayer extends JComponent {
         this.robot.setPosition(i, j);
         this.width = (int) (costat * 0.9);
         this.position = this.calculatePositionFromTileIndices(i, j, costat, borde);
-        this.prevPosX = this.position.x; 
+        this.prevPosX = this.position.x + 1; 
         this.prevPosY = this.position.y;
         this.costat = costat;
         this.borde = borde;
@@ -120,11 +134,7 @@ public class RobotDisplayer extends JComponent {
                 this.position.y = robotCoordinates.y;
             }
             
-            try {
-                Thread.sleep(sleep_millis);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(RobotDisplayer.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            Timer.doPause(sleep_millis);
 
             kitchen.repaintRobotAndTiles();
         }
@@ -138,14 +148,9 @@ public class RobotDisplayer extends JComponent {
         
         int negFinalAngle = finalAngle - 360;
         
-        System.out.println(finalAngle);
-        System.out.println(negFinalAngle);
-        System.out.println(this.rotationAngle);
-        
         finalAngle = Math.abs(finalAngle - this.rotationAngle) <= Math.abs(negFinalAngle - this.rotationAngle)
                 ? finalAngle
                 : negFinalAngle;
-        System.out.println(finalAngle);
         
         if(finalAngle == 0 && this.rotationAngle > 180){
             finalAngle = 360;
@@ -166,11 +171,7 @@ public class RobotDisplayer extends JComponent {
                 this.rotationAngle = finalAngle;
             }
             
-            try {
-                Thread.sleep(sleep_millis);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(RobotDisplayer.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            Timer.doPause(sleep_millis);
 
             kitchen.repaintRobotAndTiles();
         }

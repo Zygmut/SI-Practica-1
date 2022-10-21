@@ -91,7 +91,6 @@ public class Tile extends JComponent{
                 g2.drawImage(obstacleImage, x + (int)(costat*0.05), y + (int)(costat*0.05), (int)(costat*0.90), (int)(costat*0.90), null);
             }
             needsToBePainted = false;
-            System.out.println("hi");
         }
     }
 
