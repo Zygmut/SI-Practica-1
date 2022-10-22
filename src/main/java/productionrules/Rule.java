@@ -25,7 +25,7 @@ public class Rule<T> {
 
     @Override
     public String toString() {
-        if (action == null){
+        if (action == null) {
             return condition.toString() + " -> pass";
         }
         return condition.toString() + " -> " + action.toString();

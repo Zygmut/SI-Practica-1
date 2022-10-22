@@ -17,8 +17,8 @@ import javax.imageio.ImageIO;
  * @author ccf20
  */
 public class ImageLoader {
-    
-    public static BufferedImage loadImage(String path){
+
+    public static BufferedImage loadImage(String path) {
         BufferedImage bi = null;
         try {
             bi = ImageIO.read(new File(path));
@@ -27,5 +27,5 @@ public class ImageLoader {
         }
         return bi;
     }
-    
+
 }

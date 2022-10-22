@@ -133,13 +133,11 @@ public class Robot extends GridAgent<Executable> {
             characteristics[(i * 2) + 1].setValue(!perceptions[i]);
         }
 
-        // Looking
         characteristics[16].setValue(false);
         characteristics[17].setValue(false);
         characteristics[18].setValue(false);
         characteristics[19].setValue(false);
         characteristics[characteristics.length - (4 - this.looking.ordinal())].setValue(true);
-
 
     }
 
