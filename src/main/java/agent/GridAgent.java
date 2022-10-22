@@ -20,16 +20,6 @@ public abstract class GridAgent<T> {
         this.bc.addProdRule(new Rule<T>(new Condition(selectCharacteristics(this.characteristics, indices)), action));
     }
 
-    public void addProdRule(int[] characIdx, Characteristic[] internalStates, T action) {
-        Characteristic[] characteristics = new Characteristic[characIdx.length + internalStates.length];
-
-        System.arraycopy(selectCharacteristics(this.characteristics, characIdx), 0, characteristics, 0,
-                characIdx.length);
-        System.arraycopy(internalStates, 0, characteristics, characIdx.length, internalStates.length);
-
-        this.bc.addProdRule(new Rule<T>(new Condition(characteristics), action));
-    }
-
     public T checkBC() {
         return this.bc.check();
     }

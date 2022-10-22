@@ -52,10 +52,6 @@ public class Robot extends GridAgent<Executable> {
         }
     }
 
-    public enum LookDirection {
-        NORTH, EAST, SOUTH, WEST
-    }
-
     public enum Labels {
         Wall_NW,
         Not_Wall_NW,
@@ -73,16 +69,22 @@ public class Robot extends GridAgent<Executable> {
         Not_Wall_S,
         Wall_SE,
         Not_Wall_SE,
+        Looking_North,
+        Looking_East,
+        Looking_South,
+        Looking_West
     };
 
-    private Characteristic[] looking;
+    public enum LookDirection {
+        NORTH, EAST, SOUTH, WEST
+    }
+
+    private LookDirection looking;
 
     public Robot() {
         this.bc = new BC<>();
         this.position = new Point(-1, -1);
-        this.looking = new Characteristic[] { new Characteristic("Looking_North"), new Characteristic("Looking_East"),
-                new Characteristic("Looking_South"), new Characteristic("Looking_West") };
-        this.setLooking(LookDirection.NORTH);
+        this.looking = LookDirection.NORTH;
 
         characteristics = new Characteristic[Labels.values().length];
         for (int i = 0; i < characteristics.length; i++) {
@@ -93,9 +95,7 @@ public class Robot extends GridAgent<Executable> {
     public Robot(int x, int y) {
         this.bc = new BC<>();
         this.position = new Point(x, y);
-        this.looking = new Characteristic[] { new Characteristic("Looking_North"), new Characteristic("Looking_East"),
-                new Characteristic("Looking_South"), new Characteristic("Looking_West") };
-        this.setLooking(LookDirection.NORTH);
+        this.looking = LookDirection.NORTH;
 
         // Initialize characteristics to add labels
         characteristics = new Characteristic[Labels.values().length];
@@ -108,9 +108,7 @@ public class Robot extends GridAgent<Executable> {
     public Robot(Point position) {
         this.bc = new BC<>();
         this.position = position;
-        this.looking = new Characteristic[] { new Characteristic("Looking_North"), new Characteristic("Looking_East"),
-                new Characteristic("Looking_South"), new Characteristic("Looking_West") };
-        this.setLooking(LookDirection.NORTH);
+        this.looking = LookDirection.NORTH;
 
         // Initialize characteristics to add labels
         characteristics = new Characteristic[Labels.values().length];
@@ -120,25 +118,12 @@ public class Robot extends GridAgent<Executable> {
 
     }
 
-    public void setLooking(LookDirection look) {
-        for (Characteristic c : looking) {
-            c.setValue(false);
-        }
-
-        looking[LookDirection.valueOf(look.name()).ordinal()].setValue(true);
+    public LookDirection getLooking() {
+        return this.looking;
     }
 
-    public Characteristic getLooking() {
-        for (Characteristic c : looking) {
-            if (c.getValue() == true) {
-                return c;
-            }
-        }
-        return null;
-    }
-
-    public Characteristic getLookingRef(LookDirection lookAt) {
-        return looking[lookAt.ordinal()];
+    public void setLooking(LookDirection looking) {
+        this.looking = looking;
     }
 
     public void processPerceptions(boolean[] perceptions) {
@@ -147,6 +132,14 @@ public class Robot extends GridAgent<Executable> {
             characteristics[i * 2].setValue(perceptions[i]);
             characteristics[(i * 2) + 1].setValue(!perceptions[i]);
         }
+
+        // Looking
+        characteristics[16].setValue(false);
+        characteristics[17].setValue(false);
+        characteristics[18].setValue(false);
+        characteristics[19].setValue(false);
+        characteristics[characteristics.length - (4 - this.looking.ordinal())].setValue(true);
+
 
     }
 
