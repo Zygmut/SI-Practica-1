@@ -1,150 +1,144 @@
 package agent;
 
 import java.awt.Point;
-import java.io.Serializable;
+
 import productionrules.BC;
 import productionrules.Characteristic;
-import productionrules.Condition;
-import productionrules.Rule;
 
-public class Robot implements Serializable{
+public class Robot extends GridAgent<Executable> {
 
-    public enum Action {
+    public enum Action implements Executable {
 
         MOVE_NORTH {
 
             @Override
-            public void execute() {
-                System.out.println("NORTH");
+            public void execute(Object robot) {
+                System.out.println("[Robot.java] Action: " + this.toString());
+                ((Robot) robot).setLooking(LookDirection.NORTH);
+                Point currPosition = ((Robot) robot).getPosition();
+                ((Robot) robot).setPosition(currPosition.x, currPosition.y - 1);
             }
         },
         MOVE_SOUTH {
             @Override
-            public void execute() {
-                System.out.println("SOUTH");
+            public void execute(Object robot) {
+                System.out.println("[Robot.java] Action: " + this.toString());
+                ((Robot) robot).setLooking(LookDirection.SOUTH);
+                Point currPosition = ((Robot) robot).getPosition();
+                ((Robot) robot).setPosition(currPosition.x, currPosition.y + 1);
             }
         },
         MOVE_EAST {
             @Override
-            public void execute() {
-                System.out.println("EAST");
+            public void execute(Object robot) {
+                System.out.println("[Robot.java] Action: " + this.toString());
+                ((Robot) robot).setLooking(LookDirection.EAST);
+                Point currPosition = ((Robot) robot).getPosition();
+                ((Robot) robot).setPosition(currPosition.x + 1, currPosition.y);
             }
         },
         MOVE_WEST {
             @Override
-            public void execute() {
-                System.out.println("WEST");
+            public void execute(Object robot) {
+                System.out.println("[Robot.java] Action: " + this.toString());
+                ((Robot) robot).setLooking(LookDirection.WEST);
+                Point currPosition = ((Robot) robot).getPosition();
+                ((Robot) robot).setPosition(currPosition.x - 1, currPosition.y);
             }
         };
 
-        public void execute() {
+        public void execute(Robot robot) {
             System.out.println("NOT IMPLEMENTED");
         }
     }
 
-    // ==========================================================================
+    public enum Labels {
+        Wall_NW,
+        Not_Wall_NW,
+        Wall_N,
+        Not_Wall_N,
+        Wall_NE,
+        Not_Wall_NE,
+        Wall_W,
+        Not_Wall_W,
+        Wall_E,
+        Not_Wall_E,
+        Wall_SW,
+        Not_Wall_SW,
+        Wall_S,
+        Not_Wall_S,
+        Wall_SE,
+        Not_Wall_SE,
+        Looking_North,
+        Looking_East,
+        Looking_South,
+        Looking_West
+    };
 
-    private final String[] LABELS = { "p1", "p2", "p3", "p4", "p5", "p6", "p7", "p8" };
-    private final Characteristic[] characteristics;
+    public enum LookDirection {
+        NORTH, EAST, SOUTH, WEST
+    }
 
-    private BC bc;
-    private Point position;
+    private LookDirection looking;
 
     public Robot() {
+        this.bc = new BC<>();
         this.position = new Point(-1, -1);
+        this.looking = LookDirection.NORTH;
 
-        // Initialize characteristics to add labels
-        characteristics = new Characteristic[LABELS.length];
+        characteristics = new Characteristic[Labels.values().length];
         for (int i = 0; i < characteristics.length; i++) {
-            characteristics[i] = new Characteristic(LABELS[i]);
+            characteristics[i] = new Characteristic(Labels.values()[i].name());
         }
-
-        initBC();
     }
 
     public Robot(int x, int y) {
+        this.bc = new BC<>();
         this.position = new Point(x, y);
+        this.looking = LookDirection.NORTH;
 
         // Initialize characteristics to add labels
-        characteristics = new Characteristic[LABELS.length];
+        characteristics = new Characteristic[Labels.values().length];
         for (int i = 0; i < characteristics.length; i++) {
-            characteristics[i] = new Characteristic(LABELS[i]);
+            characteristics[i] = new Characteristic(Labels.values()[i].name());
         }
 
-        initBC();
-    }
-
-    private void initBC() {
-        this.bc = new BC();
-
-        // TODO: Add rules
     }
 
     public Robot(Point position) {
+        this.bc = new BC<>();
         this.position = position;
+        this.looking = LookDirection.NORTH;
 
         // Initialize characteristics to add labels
-        characteristics = new Characteristic[LABELS.length];
+        characteristics = new Characteristic[Labels.values().length];
         for (int i = 0; i < characteristics.length; i++) {
-            characteristics[i] = new Characteristic(LABELS[i]);
+            characteristics[i] = new Characteristic(Labels.values()[i].name());
         }
 
-        initBC();
     }
 
-    private void addRule(Rule rule) {
-        this.bc.addRule(rule);
+    public LookDirection getLooking() {
+        return this.looking;
     }
 
-    private void addRule(int[] indices, Action action) {
-        this.bc.addRule(new Rule(new Condition(selectCharacteristics(this.characteristics, indices)), action));
-    }
-
-    public Action checkBC() {
-        return this.bc.check();
-    }
-
-    public String printBC() {
-        return this.bc.toString();
-    }
-
-    public String printEvaluatedBC() {
-        return this.bc.toStringEvaluated();
+    public void setLooking(LookDirection looking) {
+        this.looking = looking;
     }
 
     public void processPerceptions(boolean[] perceptions) {
 
-        enum PerceptionIndex {
-            TOP_LEFT, TOP, TOP_RIGHT, LEFT, RIGHT, BOTTOM_LEFT, BOTTOM, BOTTOM_RIGHT
+        for (int i = 0; i < perceptions.length; i++) {
+            characteristics[i * 2].setValue(perceptions[i]);
+            characteristics[(i * 2) + 1].setValue(!perceptions[i]);
         }
 
-        // ? DEBUG
-        // System.out.println("Robot perceptions: ");
-        // for (int i = 0; i < PerceptionIndex.values().length; i++) {
-        // System.out.println(PerceptionIndex.values()[i] + ": " + perceptions[i]);
-        // }
-    }
+        characteristics[16].setValue(false);
+        characteristics[17].setValue(false);
+        characteristics[18].setValue(false);
+        characteristics[19].setValue(false);
+        characteristics[characteristics.length - (4 - this.looking.ordinal())].setValue(true);
 
-    public Point getPosition() {
-        return position;
-    }
-
-    public void setPosition(Point position) {
-        this.position = position;
-    }
-
-    public void setPosition(int x, int y) {
-        this.position = new Point(x, y);
-    }
-
-    // ==========================================================================
-
-    private Characteristic[] selectCharacteristics(Characteristic[] characteristics, int[] indices) {
-        Characteristic[] resultCharacteristics = new Characteristic[indices.length];
-        for (int i = 0; i < indices.length; i++) {
-            resultCharacteristics[i] = characteristics[indices[i]];
-        }
-        return resultCharacteristics;
     }
 
 }

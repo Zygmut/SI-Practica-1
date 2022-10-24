@@ -7,6 +7,8 @@ import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
+import agent.Robot;
+
 public class RobotGui extends JFrame {
 
     private final int INITIAL_SIZE = 15;
@@ -53,7 +55,7 @@ public class RobotGui extends JFrame {
         
     }
 
-    public void setMap(Environment env) {
+    public void setMap(Environment<Robot> env) {
         this.kitchen.setMap(env);
     }
     
@@ -63,8 +65,8 @@ public class RobotGui extends JFrame {
             this.remove(this.kitchen);
         }
         
-        Environment env = new Environment(n);
-        RobotDisplayer robotDisplayer = new RobotDisplayer(env.getRobot());
+        Environment<Robot> env = new Environment<>(n);
+        RobotDisplayer robotDisplayer = new RobotDisplayer((Robot) env.getAgent());
         
         this.options.setRobotDisplayerActiveReference(robotDisplayer.getIsActiveReference());
         
