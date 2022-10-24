@@ -42,7 +42,7 @@ public class OptionsPanel extends JPanel {
     private final int ANCHO = 250;
     private final int ALTO = 20;
 
-    private final String[] obstacleNames = new String[]{"box", "microwave", "oven", "table", "fruit"};
+    private final String[] obstacleNames = new String[] { "box", "microwave", "oven", "table", "fruit" };
     private final String baseImagesPath = "src/main/java/images/";
     private final String extension = ".png";
     private final BufferedImage[] images;
@@ -58,7 +58,7 @@ public class OptionsPanel extends JPanel {
 
     private ButtonGroup groupbtn;
 
-    private ArrayList<JButton> botones = new ArrayList();
+    private ArrayList<JButton> botones = new ArrayList<>();
     private JFormattedTextField inputDimsTablero;
     private int dimsTableroPrevias;
 
@@ -72,15 +72,25 @@ public class OptionsPanel extends JPanel {
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         images = loadImages();
-        this.roombaImage = new ImageIcon(new ImageIcon(baseImagesPath + "roomba128" + extension).getImage().getScaledInstance(DIM_ROBOT, DIM_ROBOT, Image.SCALE_SMOOTH));
-        this.roombaTransparentImage = new ImageIcon(new ImageIcon(baseImagesPath + "roombatransparent" + extension).getImage().getScaledInstance(DIM_ROBOT, DIM_ROBOT, Image.SCALE_SMOOTH));
+
+        // Set default tile image
+        Tile.setObstacleImage(images[0]);
+
+        this.roombaImage = new ImageIcon(new ImageIcon(baseImagesPath + "roomba128" + extension).getImage()
+                .getScaledInstance(DIM_ROBOT, DIM_ROBOT, Image.SCALE_SMOOTH));
+        this.roombaTransparentImage = new ImageIcon(new ImageIcon(baseImagesPath + "roombatransparent" + extension)
+                .getImage().getScaledInstance(DIM_ROBOT, DIM_ROBOT, Image.SCALE_SMOOTH));
         this.robotLabel = new JLabel(roombaImage);
-        
+
         this.initComponents();
 
         inputDimsTablero.setText(Integer.toString(n));
         dimsTableroPrevias = n;
 
+    }
+
+    public void setText(String s) {
+        inputDimsTablero.setText(s);
     }
 
     public void setRobotDisplayerActiveReference(MutableBoolean isActiveReference) {
@@ -90,7 +100,7 @@ public class OptionsPanel extends JPanel {
     private void initComponents() {
         groupbtn = new ButtonGroup();
         initInputDimTablero();
-        //this.add(Box.createVerticalGlue());
+        // this.add(Box.createVerticalGlue());
         initInputs();
 
         initRobotSelector();
@@ -162,10 +172,15 @@ public class OptionsPanel extends JPanel {
         if (pos >= 0) {
 
             JRadioButton jr = new JRadioButton();
-            jr.setIcon(new ImageIcon(new ImageIcon(baseImagesPath + "radioicon" + extension).getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH)));
-            jr.setRolloverIcon(new ImageIcon(new ImageIcon(baseImagesPath + "radiorollovericon" + extension).getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH)));
-            jr.setSelectedIcon(new ImageIcon(new ImageIcon(baseImagesPath + "radioselectedicon" + extension).getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH)));
-            jr.setRolloverSelectedIcon(new ImageIcon(new ImageIcon(baseImagesPath + "radiorolloverselectedicon" + extension).getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH)));
+            jr.setIcon(new ImageIcon(new ImageIcon(baseImagesPath + "radioicon" + extension).getImage()
+                    .getScaledInstance(25, 25, Image.SCALE_SMOOTH)));
+            jr.setRolloverIcon(new ImageIcon(new ImageIcon(baseImagesPath + "radiorollovericon" + extension).getImage()
+                    .getScaledInstance(25, 25, Image.SCALE_SMOOTH)));
+            jr.setSelectedIcon(new ImageIcon(new ImageIcon(baseImagesPath + "radioselectedicon" + extension).getImage()
+                    .getScaledInstance(25, 25, Image.SCALE_SMOOTH)));
+            jr.setRolloverSelectedIcon(
+                    new ImageIcon(new ImageIcon(baseImagesPath + "radiorolloverselectedicon" + extension).getImage()
+                            .getScaledInstance(25, 25, Image.SCALE_SMOOTH)));
             jr.setActionCommand(Integer.toString(pos));
             jr.addActionListener(getChangeObstacleActionListener());
             this.groupbtn.add(jr);
@@ -227,7 +242,7 @@ public class OptionsPanel extends JPanel {
         handler.setDragImage(roombaImage.getImage());
         robotLabel.setTransferHandler(handler);
 
-        //Mouse adapter for handle drag and drop 
+        // Mouse adapter for handle drag and drop
         robotLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -240,10 +255,10 @@ public class OptionsPanel extends JPanel {
             }
 
             @Override
-            public void mouseClicked(MouseEvent e){
+            public void mouseClicked(MouseEvent e) {
                 JComponent c = (JComponent) e.getSource();
                 JLabel lab = ((JLabel) c);
-                if(lab.getIcon() == roombaTransparentImage){
+                if (lab.getIcon() == roombaTransparentImage) {
                     lab.setIcon(roombaImage);
                     isRobotActive.setValue(false);
                     gui.repaint();
@@ -258,44 +273,43 @@ public class OptionsPanel extends JPanel {
 
         panelRobots.add(Box.createVerticalGlue());
         panelRobots.add(aux);
-        
-        //panelRobots.add(Box.createRigidArea(new Dimension(1, 20)));
-        
+
+        // panelRobots.add(Box.createRigidArea(new Dimension(1, 20)));
+
         JPanel aux2 = new JPanel();
         aux2.setLayout(new GridLayout());
-        
-        slider = new JSlider(1, 4, 1){
+
+        slider = new JSlider(1, 4, 1) {
             @Override
             public void updateUI() {
                 setUI(new CustomSliderUI(this));
             }
         };
-        
+
         slider.setValue(2);
         slider.setPaintLabels(true);
         slider.setPaintTicks(true);
         slider.setMajorTickSpacing(1);
         slider.setForeground(Color.BLACK);
-        
-        
+
         Hashtable labels = new Hashtable();
         labels.put(Integer.valueOf(1), new JLabel("x0.5"));
         labels.put(Integer.valueOf(2), new JLabel("x1"));
         labels.put(Integer.valueOf(3), new JLabel("x2"));
         labels.put(Integer.valueOf(4), new JLabel("x4"));
         slider.setLabelTable(labels);
-        
-        slider.addChangeListener(new ChangeListener(){
+
+        slider.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
                 updateRobotSpeedFactor();
             }
-            
+
         });
-        
+
         aux2.add(slider);
         panelRobots.add(aux2);
-        
+
         panelRobots.add(Box.createVerticalGlue());
 
         this.add(panelRobots);
@@ -313,18 +327,18 @@ public class OptionsPanel extends JPanel {
     public Dimension getPreferredSize() {
         return new Dimension(ANCHO, ALTO);
     }
-    
-    public void updateRobotSpeedFactor(){
-        Hashtable<Integer, JLabel> labelTable = (Hashtable)slider.getLabelTable();
+
+    public void updateRobotSpeedFactor() {
+        Hashtable<Integer, JLabel> labelTable = (Hashtable) slider.getLabelTable();
         Integer value = slider.getValue();
         JLabel label = labelTable.get(value);
         gui.setRobotDisplayerSpeedFactor(Double.valueOf(label.getText().replace("x", "")));
     }
 
     void setRobotActive(boolean isActive) {
-        if(isActive){
+        if (isActive) {
             robotLabel.setIcon(roombaTransparentImage);
-        }else{
+        } else {
             robotLabel.setIcon(roombaImage);
         }
     }

@@ -10,11 +10,11 @@ import utils.MutableBoolean;
 /*
 Classe que controla el funcionament d'una casella
  */
-public class Tile extends JComponent{
+public class Tile extends JComponent {
 
     // Variables estaticas
     private static BufferedImage currentImage;
-    
+
     // Constants de la casella
     private final Color colorFonsBlanc = new Color(225, 225, 225);
     private final Color colorFonsAltre = new Color(30, 30, 30);
@@ -27,8 +27,6 @@ public class Tile extends JComponent{
     private BufferedImage obstacleImage = null;
     private MutableBoolean isObstacle = new MutableBoolean(false);
     private boolean needsToBePainted = true;
-    
-    
 
     // Constructor de la casella
     public Tile(int i, int j, int costat, boolean fons, int borde) {
@@ -36,10 +34,10 @@ public class Tile extends JComponent{
         x = j * this.costat + borde;
         y = i * this.costat + borde;
         this.fons = fons;
-       
+
     }
-    
-    public static void setObstacleImage(BufferedImage obstacleImage){
+
+    public static void setObstacleImage(BufferedImage obstacleImage) {
         Tile.currentImage = obstacleImage;
     }
 
@@ -51,10 +49,10 @@ public class Tile extends JComponent{
         this.isObstacle.setValue(value);
         this.obstacleImage = Tile.currentImage;
     }
-    
-    public void toggleIsObstacle(){
+
+    public void toggleIsObstacle() {
         this.isObstacle.toggle();
-        if(this.isObstacle()){
+        if (this.isObstacle()) {
             this.obstacleImage = Tile.currentImage;
         }
     }
@@ -66,16 +64,15 @@ public class Tile extends JComponent{
     public void setIsObstacleReference(MutableBoolean isObstacle) {
         this.isObstacle = isObstacle;
     }
-    
-    public void notifyChange(){
+
+    public void notifyChange() {
         this.needsToBePainted = true;
     }
-    
-    
+
     // Mètode que pinta una casella
     @Override
     public void paintComponent(Graphics g) {
-        if(needsToBePainted){
+        if (needsToBePainted) {
             Graphics2D g2 = (Graphics2D) g;
             if (fons) {
                 g2.setColor(colorFonsAltre);
@@ -84,11 +81,12 @@ public class Tile extends JComponent{
             }
 
             g2.fill3DRect(x, y, costat, costat, true);
-            g2.setColor(Color.GRAY); 
+            g2.setColor(Color.GRAY);
             g2.drawRect(x, y, costat, costat);
 
-            if(isObstacle()){
-                g2.drawImage(obstacleImage, x + (int)Math.ceil(costat*0.05), y + (int)Math.ceil(costat*0.05), (int)Math.ceil(costat*0.90), (int)Math.ceil(costat*0.90), null);
+            if (isObstacle()) {
+                g2.drawImage(obstacleImage, x + (int) Math.ceil(costat * 0.05), y + (int) Math.ceil(costat * 0.05),
+                        (int) Math.ceil(costat * 0.90), (int) Math.ceil(costat * 0.90), null);
             }
             needsToBePainted = false;
         }
