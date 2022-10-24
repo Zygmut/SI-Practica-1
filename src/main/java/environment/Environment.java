@@ -1,6 +1,8 @@
 
 package environment;
 
+import agent.Executable;
+import agent.GridAgent;
 import java.awt.Point;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -8,13 +10,11 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-
-import agent.Executable;
-import agent.GridAgent;
 import utils.MutableBoolean;
 
 public class Environment<T> implements Serializable {
 
+    private static final String basePath = "test_maps/";
     private MutableBoolean[][] map;
     private T agent;
 
@@ -102,6 +102,8 @@ public class Environment<T> implements Serializable {
         if (!path.endsWith(".map")) {
             filePath = path + ".map";
         }
+        
+        filePath = basePath + filePath;
 
         MutableBoolean[][] map = null;
         try {
@@ -119,6 +121,8 @@ public class Environment<T> implements Serializable {
         if (!path.endsWith(".map")) {
             filePath = path + ".map";
         }
+        
+        filePath = basePath + filePath;
 
         try {
             ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filePath));

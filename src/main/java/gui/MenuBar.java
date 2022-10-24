@@ -4,6 +4,8 @@
  */
 package gui;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -14,7 +16,10 @@ import javax.swing.JMenuItem;
  */
 public class MenuBar extends JMenuBar{
     
-    public MenuBar(){
+    private final RobotGui gui;
+    
+    public MenuBar(RobotGui gui){
+        this.gui = gui;
         initComponents();
     }
 
@@ -26,8 +31,25 @@ public class MenuBar extends JMenuBar{
         
         JMenuItem save = new JMenuItem("Guardar tablero");
         files.add(save);
+        save.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                gui.saveMap();
+            }
+            
+        });
+        
+        
         JMenuItem load = new JMenuItem("Cargar tablero");
         files.add(load);
+        load.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                gui.loadMap();
+            }
+            
+        });
+        
         
         this.add(files);
         
@@ -35,6 +57,13 @@ public class MenuBar extends JMenuBar{
         
         JMenuItem cleanItem = new JMenuItem("Limpiar tablero");
         clean.add(cleanItem);
+        cleanItem.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                gui.resetKitchen();
+            }
+            
+        });
         
         this.add(clean);
         

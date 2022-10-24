@@ -6,7 +6,10 @@ import java.awt.BorderLayout;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class RobotGui extends JFrame {
 
@@ -49,6 +52,8 @@ public class RobotGui extends JFrame {
         this.add(this.options, BorderLayout.WEST);
 
         this.addNewKitchen(INITIAL_SIZE);
+        
+        this.setJMenuBar(new MenuBar(this));
 
     }
 
@@ -88,6 +93,7 @@ public class RobotGui extends JFrame {
         }
 
         this.env = new Environment<>(n);
+        this.env.setAgent(new Robot());
         RobotDisplayer robotDisplayer = new RobotDisplayer((Robot) env.getAgent());
 
         this.options.setRobotDisplayerActiveReference(robotDisplayer.getIsActiveReference());
@@ -110,6 +116,33 @@ public class RobotGui extends JFrame {
 
     public void setRobotDisplayerSpeedFactor(double speedFactor) {
         this.kitchen.setRobotDisplayerSpeedFactor(speedFactor);
+    }
+    
+    public void saveMap(){
+        String value = JOptionPane.showInputDialog(this, "Selecciona el nombre del archivo", "Guardar archivo", JOptionPane.QUESTION_MESSAGE);
+        if(value == null || value.equals("")) return;
+        this.env.saveMap(value);
+    }
+    
+    public void loadMap(){
+        
+        JFileChooser fileChooser = new JFileChooser("test_maps/");
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("Maps of kitchen", "map"));
+        fileChooser.setAcceptAllFileFilterUsed(false);
+        
+        int value = fileChooser.showOpenDialog(this);
+        if(value == JFileChooser.APPROVE_OPTION){
+            Environment<Robot> env = new Environment<>(Environment.useMap(fileChooser.getSelectedFile().getName()));
+            Robot r = new Robot();
+            env.setAgent(r);
+            this.setEnv(env);
+        }
+        
+    }
+    
+    public void resetKitchen(){
+        this.kitchen.resetAll();
     }
 
 }

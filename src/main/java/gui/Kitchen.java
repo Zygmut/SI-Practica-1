@@ -1,5 +1,6 @@
 package gui;
 
+import agent.Robot;
 import environment.Environment;
 import java.awt.Color;
 import java.awt.Component;
@@ -19,8 +20,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import javax.swing.JPanel;
 import javax.swing.TransferHandler;
-
-import agent.Robot;
 
 public class Kitchen extends JPanel implements MouseListener, MouseMotionListener {
 
@@ -383,4 +382,17 @@ public class Kitchen extends JPanel implements MouseListener, MouseMotionListene
 
         this.repaint();
     }
+    
+    public void resetAll(){
+        for (int i = 0; i < costat; i++) {
+            for (int j = 0; j < costat; j++) {
+                tiles[i][j].setIsObstacle(false);
+                tiles[i][j].notifyChange();
+
+            }
+        }
+        this.repaint();
+    }
+    
+    
 }
