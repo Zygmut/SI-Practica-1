@@ -73,6 +73,8 @@ public class RobotGui extends JFrame {
         this.kitchen = new Kitchen(n, this, env, robotDisplayer);
         this.add(kitchen, BorderLayout.CENTER);
         
+        this.options.updateRobotSpeedFactor();
+        
         this.revalidate();
         this.repaint();
         

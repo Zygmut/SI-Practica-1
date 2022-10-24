@@ -51,6 +51,7 @@ public class OptionsPanel extends JPanel {
     private final JLabel robotLabel;
     private final RobotGui gui;
     private MutableBoolean isRobotActive;
+    private JSlider slider;
 
     // private final Vista vista;
     private final Dimension dimensionInputs = new Dimension(145, 30);
@@ -262,7 +263,7 @@ public class OptionsPanel extends JPanel {
         JPanel aux2 = new JPanel();
         aux2.setLayout(new GridLayout());
         
-        JSlider slider = new JSlider(1, 4, 1){
+        slider = new JSlider(1, 4, 1){
             @Override
             public void updateUI() {
                 setUI(new CustomSliderUI(this));
@@ -286,11 +287,7 @@ public class OptionsPanel extends JPanel {
         slider.addChangeListener(new ChangeListener(){
             @Override
             public void stateChanged(ChangeEvent e) {
-                JSlider slider = (JSlider)e.getSource();
-                Hashtable<Integer, JLabel> labelTable = (Hashtable)slider.getLabelTable();
-                Integer value = slider.getValue();
-                JLabel label = labelTable.get(value);
-                gui.setRobotDisplayerSpeedFactor(Double.valueOf(label.getText().replace("x", "")));
+                updateRobotSpeedFactor();
             }
             
         });
@@ -314,6 +311,13 @@ public class OptionsPanel extends JPanel {
     @Override
     public Dimension getPreferredSize() {
         return new Dimension(ANCHO, ALTO);
+    }
+    
+    public void updateRobotSpeedFactor(){
+        Hashtable<Integer, JLabel> labelTable = (Hashtable)slider.getLabelTable();
+        Integer value = slider.getValue();
+        JLabel label = labelTable.get(value);
+        gui.setRobotDisplayerSpeedFactor(Double.valueOf(label.getText().replace("x", "")));
     }
 
     void setRobotActive(boolean isActive) {
