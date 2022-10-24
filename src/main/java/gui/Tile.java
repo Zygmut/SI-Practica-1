@@ -88,7 +88,7 @@ public class Tile extends JComponent{
             g2.drawRect(x, y, costat, costat);
 
             if(isObstacle()){
-                g2.drawImage(obstacleImage, x + (int)(costat*0.05), y + (int)(costat*0.05), (int)(costat*0.90), (int)(costat*0.90), null);
+                g2.drawImage(obstacleImage, x + (int)Math.ceil(costat*0.05), y + (int)Math.ceil(costat*0.05), (int)Math.ceil(costat*0.90), (int)Math.ceil(costat*0.90), null);
             }
             needsToBePainted = false;
         }

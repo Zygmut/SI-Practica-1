@@ -62,7 +62,7 @@ public class Kitchen extends JPanel implements MouseListener, MouseMotionListene
             @Override
             public void keyPressed(KeyEvent e) {
 
-                if (isInAnimation) return;
+                if (isInAnimation || !robotDisplayer.isActive()) return;
 
                 ExecutorService executor = Executors.newSingleThreadExecutor();
 
@@ -202,7 +202,6 @@ public class Kitchen extends JPanel implements MouseListener, MouseMotionListene
     // Pinta el tauler
     @Override
     public void paintComponent(Graphics g) {
-        System.out.println("called");
         super.paintComponent(g);
 
         if (starterImage == null) {
@@ -245,6 +244,10 @@ public class Kitchen extends JPanel implements MouseListener, MouseMotionListene
 
     public void setObstacleImage(BufferedImage im) {
         Tile.setObstacleImage(im);
+    }
+    
+    public void setRobotDisplayerSpeedFactor(double speedFactor){
+        this.robotDisplayer.setSpeedFactor(speedFactor);
     }
 
 //    public void refresh() {
@@ -348,8 +351,7 @@ public class Kitchen extends JPanel implements MouseListener, MouseMotionListene
             }
             this.tiles[x][y].notifyChange();
         }
-        System.out.println("me cago en todo");
-        //this.robotDisplayer.paintComponent(this.getGraphics());
+        
         this.repaint();
     }
 

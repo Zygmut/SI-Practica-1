@@ -5,6 +5,7 @@ import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
@@ -15,6 +16,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -26,7 +28,10 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JSlider;
 import javax.swing.TransferHandler;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import utils.ImageLoader;
 import utils.MutableBoolean;
 
@@ -251,6 +256,48 @@ public class OptionsPanel extends JPanel {
 
         panelRobots.add(Box.createVerticalGlue());
         panelRobots.add(aux);
+        
+        //panelRobots.add(Box.createRigidArea(new Dimension(1, 20)));
+        
+        JPanel aux2 = new JPanel();
+        aux2.setLayout(new GridLayout());
+        
+        JSlider slider = new JSlider(1, 4, 1){
+            @Override
+            public void updateUI() {
+                setUI(new CustomSliderUI(this));
+            }
+        };
+        
+        slider.setValue(2);
+        slider.setPaintLabels(true);
+        slider.setPaintTicks(true);
+        slider.setMajorTickSpacing(1);
+        slider.setForeground(Color.BLACK);
+        
+        
+        Hashtable labels = new Hashtable();
+        labels.put(Integer.valueOf(1), new JLabel("x0.5"));
+        labels.put(Integer.valueOf(2), new JLabel("x1"));
+        labels.put(Integer.valueOf(3), new JLabel("x2"));
+        labels.put(Integer.valueOf(4), new JLabel("x4"));
+        slider.setLabelTable(labels);
+        
+        slider.addChangeListener(new ChangeListener(){
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                JSlider slider = (JSlider)e.getSource();
+                Hashtable<Integer, JLabel> labelTable = (Hashtable)slider.getLabelTable();
+                Integer value = slider.getValue();
+                JLabel label = labelTable.get(value);
+                gui.setRobotDisplayerSpeedFactor(Double.valueOf(label.getText().replace("x", "")));
+            }
+            
+        });
+        
+        aux2.add(slider);
+        panelRobots.add(aux2);
+        
         panelRobots.add(Box.createVerticalGlue());
 
         this.add(panelRobots);

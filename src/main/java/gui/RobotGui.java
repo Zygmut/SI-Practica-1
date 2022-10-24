@@ -68,6 +68,8 @@ public class RobotGui extends JFrame {
         
         this.options.setRobotDisplayerActiveReference(robotDisplayer.getIsActiveReference());
         
+        this.options.setRobotActive(false);
+        
         this.kitchen = new Kitchen(n, this, env, robotDisplayer);
         this.add(kitchen, BorderLayout.CENTER);
         
@@ -78,6 +80,10 @@ public class RobotGui extends JFrame {
     
     public void setRobotActive(boolean value){
         this.options.setRobotActive(value);
+    }
+    
+    public void setRobotDisplayerSpeedFactor(double speedFactor){
+        this.kitchen.setRobotDisplayerSpeedFactor(speedFactor);
     }
 
 }

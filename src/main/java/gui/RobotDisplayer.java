@@ -38,10 +38,13 @@ public class RobotDisplayer extends JComponent {
         }
 
     private final int sleep_millis = 10;
+    //private final int animation_time = 1000;
+    private int sizeFactor = 1;
+    private final int sizeFactorDivider = 50;
+    private double speedFactor = 1.0f;
     private final Robot robot;
-    private final int incX = 2;
-    private final int incY = 2;
-    private final int incAngle = 2;
+    private final int baseIncMovement = 2;
+    private final int baseIncAngle = 3;
     private int prevPosX;
     private int prevPosY;
     private final BufferedImage image;
@@ -82,6 +85,9 @@ public class RobotDisplayer extends JComponent {
         this.prevPosY = this.position.y;
         this.costat = costat;
         this.borde = borde;
+        this.rotationAngle = 0;
+        
+        this.sizeFactor = (this.costat / sizeFactorDivider);
     }
     
     public Point getTileIndices(){
@@ -103,42 +109,48 @@ public class RobotDisplayer extends JComponent {
     public void temporalMoveRobot(int i, int j){
         this.robot.setPosition(this.robot.getPosition().x + i, this.robot.getPosition().y + j);
     }
+    
+    public void setSpeedFactor(double speedFactor){
+        this.speedFactor = speedFactor;
+    }
 
     public void move(Kitchen kitchen) {
-        Point robotCoordinates = calculatePositionFromTileIndices(this.robot.getPosition().x, this.robot.getPosition().y, this.costat, this.borde);
-        int multiplierX = (int) Math.signum(Integer.compare(robotCoordinates.x, this.position.x));
-        int multiplierY = (int) Math.signum(Integer.compare(robotCoordinates.y, this.position.y));
-        int currentIncX = incX * multiplierX;
-        int currentIncY = incY * multiplierY;
-       
-        this.rotate(kitchen, this.robot.getPosition().x, this.robot.getPosition().y);
+        if(isActive()){
+            Point robotCoordinates = calculatePositionFromTileIndices(this.robot.getPosition().x, this.robot.getPosition().y, this.costat, this.borde);
+            int multiplierX = (int) Math.signum(Integer.compare(robotCoordinates.x, this.position.x));
+            int multiplierY = (int) Math.signum(Integer.compare(robotCoordinates.y, this.position.y));
 
-        this.prevPosX = this.robot.getPosition().x;
-        this.prevPosY = this.robot.getPosition().y;
-        
-        while (this.position.x != robotCoordinates.x || this.position.y != robotCoordinates.y) {
-            this.position.x += currentIncX;
-            this.position.y += currentIncY;
+            int currentIncX = (int)(this.speedFactor * this.sizeFactor * baseIncMovement * multiplierX);
+            int currentIncY = (int)(this.speedFactor * this.sizeFactor * baseIncMovement * multiplierY);
 
-            //check if we have passed the target
-            if (currentIncX > 0 && this.position.x > robotCoordinates.x
-                    || currentIncX < 0 && this.position.x < robotCoordinates.x) {
-                
-                this.position.x = robotCoordinates.x;
+            this.rotate(kitchen, this.robot.getPosition().x, this.robot.getPosition().y);
+
+            this.prevPosX = this.robot.getPosition().x;
+            this.prevPosY = this.robot.getPosition().y;
+
+            while (this.position.x != robotCoordinates.x || this.position.y != robotCoordinates.y) {
+                this.position.x += currentIncX;
+                this.position.y += currentIncY;
+
+                //check if we have passed the target
+                if (currentIncX > 0 && this.position.x > robotCoordinates.x
+                        || currentIncX < 0 && this.position.x < robotCoordinates.x) {
+
+                    this.position.x = robotCoordinates.x;
+                }
+
+                //check if we have passed the target
+                if (currentIncY > 0 && this.position.y > robotCoordinates.y
+                        || currentIncY < 0 && this.position.y < robotCoordinates.y) {
+
+                    this.position.y = robotCoordinates.y;
+                }
+
+                Timer.doPause(sleep_millis);
+
+                kitchen.repaintRobotAndTiles();
             }
-            
-            //check if we have passed the target
-            if (currentIncY > 0 && this.position.y > robotCoordinates.y
-                    || currentIncY < 0 && this.position.y < robotCoordinates.y) {
-                
-                this.position.y = robotCoordinates.y;
-            }
-            
-            Timer.doPause(sleep_millis);
-
-            kitchen.repaintRobotAndTiles();
         }
-
     }
     
     private void rotate(Kitchen kitchen, int targetPosX, int targetPosY){
@@ -158,7 +170,7 @@ public class RobotDisplayer extends JComponent {
         
         int multiplier = this.rotationAngle <= finalAngle ? 1 : -1;
         
-        int currentIncAngle = multiplier * this.incAngle;
+        int currentIncAngle = (int)(this.speedFactor * multiplier * this.baseIncAngle);
         
         while (this.rotationAngle != finalAngle) {
             this.rotationAngle += currentIncAngle;
