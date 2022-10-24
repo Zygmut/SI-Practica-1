@@ -63,6 +63,7 @@ public class OptionsPanel extends JPanel {
     private int dimsTableroPrevias;
 
     public OptionsPanel(int n, RobotGui gui) {
+        
 
         this.gui = gui;
         this.setBorder(BorderFactory.createCompoundBorder(

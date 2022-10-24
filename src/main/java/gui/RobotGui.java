@@ -1,13 +1,12 @@
 package gui;
 
+import agent.Robot;
 import environment.Environment;
 import java.awt.BorderLayout;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-
-import agent.Robot;
 
 public class RobotGui extends JFrame {
 
@@ -52,6 +51,9 @@ public class RobotGui extends JFrame {
         this.add(this.options, BorderLayout.WEST);
         
         this.addNewKitchen(INITIAL_SIZE);
+        
+        this.setJMenuBar(new MenuBar());
+        
         
     }
 
