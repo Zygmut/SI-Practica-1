@@ -60,6 +60,10 @@ public class Environment<T> implements Serializable {
         return this.agent;
     }
 
+    public int getSize() {
+        return this.map.length;
+    }
+
     @SuppressWarnings("unchecked")
     public void runIteration() {
         ((GridAgent<Executable>) agent).processPerceptions(getPerceptions(agent));
@@ -107,7 +111,6 @@ public class Environment<T> implements Serializable {
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
-
         return map;
     }
 

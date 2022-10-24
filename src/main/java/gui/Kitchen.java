@@ -20,6 +20,8 @@ import java.util.concurrent.Executors;
 import javax.swing.JPanel;
 import javax.swing.TransferHandler;
 
+import agent.Robot;
+
 public class Kitchen extends JPanel implements MouseListener, MouseMotionListener {
 
     private final DataFlavor SUPPORTED_DATA_FLAVOR = DataFlavor.imageFlavor;
@@ -43,26 +45,27 @@ public class Kitchen extends JPanel implements MouseListener, MouseMotionListene
     private boolean isInAnimation = false;
 
     // Constructor del tauler
-    public Kitchen(int n, RobotGui gui, Environment env, RobotDisplayer robotDisplayer) {
+    public Kitchen(int n, RobotGui gui, Environment<Robot> env, RobotDisplayer robotDisplayer) {
         this.setLayout(null);
-        //this.setBorder(BorderFactory.createLineBorder(colorBorde, 2));
+        // this.setBorder(BorderFactory.createLineBorder(colorBorde, 2));
         this.costat = n;
         this.costatCasella = pixelsCostat / costat;
         this.dimsBorde += (int) (((((float) pixelsCostat) / costat) - costatCasella) * costat / 2);
         this.tiles = new Tile[costat][costat];
         boolean fons = false;
         this.robotDisplayer = robotDisplayer;
-//        this.setDoubleBuffered(false);
+        // this.setDoubleBuffered(false);
 
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
 
-        //****************************** DELETE ********************************
+        // ****************************** DELETE ********************************
         this.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
 
-                if (isInAnimation || !robotDisplayer.isActive()) return;
+                if (isInAnimation || !robotDisplayer.isActive())
+                    return;
 
                 ExecutorService executor = Executors.newSingleThreadExecutor();
 
@@ -70,7 +73,7 @@ public class Kitchen extends JPanel implements MouseListener, MouseMotionListene
                     case KeyEvent.VK_LEFT -> {
                         executor.execute(() -> {
                             isInAnimation = true;
-                            robotDisplayer.temporalMoveRobot(0, -1); //WEAST
+                            robotDisplayer.temporalMoveRobot(0, -1); // WEAST
                             robotDisplayer.move(Kitchen.this);
                             isInAnimation = false;
                         });
@@ -79,7 +82,7 @@ public class Kitchen extends JPanel implements MouseListener, MouseMotionListene
                     case KeyEvent.VK_RIGHT -> {
                         executor.execute(() -> {
                             isInAnimation = true;
-                            robotDisplayer.temporalMoveRobot(0, 1); //EAST
+                            robotDisplayer.temporalMoveRobot(0, 1); // EAST
                             robotDisplayer.move(Kitchen.this);
                             isInAnimation = false;
                         });
@@ -88,7 +91,7 @@ public class Kitchen extends JPanel implements MouseListener, MouseMotionListene
                     case KeyEvent.VK_UP -> {
                         executor.execute(() -> {
                             isInAnimation = true;
-                            robotDisplayer.temporalMoveRobot(-1, 0); //NORTH
+                            robotDisplayer.temporalMoveRobot(-1, 0); // NORTH
                             robotDisplayer.move(Kitchen.this);
                             isInAnimation = false;
                         });
@@ -97,7 +100,7 @@ public class Kitchen extends JPanel implements MouseListener, MouseMotionListene
                     case KeyEvent.VK_DOWN -> {
                         executor.execute(() -> {
                             isInAnimation = true;
-                            robotDisplayer.temporalMoveRobot(1, 0); //SOUTH
+                            robotDisplayer.temporalMoveRobot(1, 0); // SOUTH
                             robotDisplayer.move(Kitchen.this);
                             isInAnimation = false;
                         });
@@ -106,28 +109,28 @@ public class Kitchen extends JPanel implements MouseListener, MouseMotionListene
                     case KeyEvent.VK_SPACE -> {
                         executor.execute(() -> {
                             isInAnimation = true;
-                            robotDisplayer.temporalMoveRobot(-1, 0); //NORTH
+                            robotDisplayer.temporalMoveRobot(-1, 0); // NORTH
                             robotDisplayer.move(Kitchen.this);
 
-                            robotDisplayer.temporalMoveRobot(-1, 0); //NORTH
+                            robotDisplayer.temporalMoveRobot(-1, 0); // NORTH
                             robotDisplayer.move(Kitchen.this);
 
-                            robotDisplayer.temporalMoveRobot(0, -1); //WEAST
+                            robotDisplayer.temporalMoveRobot(0, -1); // WEAST
                             robotDisplayer.move(Kitchen.this);
 
-                            robotDisplayer.temporalMoveRobot(0, -1); //WEAST
+                            robotDisplayer.temporalMoveRobot(0, -1); // WEAST
                             robotDisplayer.move(Kitchen.this);
 
-                            robotDisplayer.temporalMoveRobot(1, 0); //SOUTH
+                            robotDisplayer.temporalMoveRobot(1, 0); // SOUTH
                             robotDisplayer.move(Kitchen.this);
 
-                            robotDisplayer.temporalMoveRobot(1, 0); //SOUTH
+                            robotDisplayer.temporalMoveRobot(1, 0); // SOUTH
                             robotDisplayer.move(Kitchen.this);
 
-                            robotDisplayer.temporalMoveRobot(0, 1); //EAST
+                            robotDisplayer.temporalMoveRobot(0, 1); // EAST
                             robotDisplayer.move(Kitchen.this);
 
-                            robotDisplayer.temporalMoveRobot(0, 1); //EAST
+                            robotDisplayer.temporalMoveRobot(0, 1); // EAST
                             robotDisplayer.move(Kitchen.this);
                             isInAnimation = false;
                         });
@@ -138,8 +141,8 @@ public class Kitchen extends JPanel implements MouseListener, MouseMotionListene
             }
         });
 
-        //****************************** DELETE ********************************
-        //Set transfer handler to manage the drop on the panel for the robot
+        // ****************************** DELETE ********************************
+        // Set transfer handler to manage the drop on the panel for the robot
         this.setTransferHandler(new TransferHandler("icon") {
 
             @Override
@@ -147,7 +150,7 @@ public class Kitchen extends JPanel implements MouseListener, MouseMotionListene
                 return true;
             }
 
-            //Action to do when de robot is dropped here
+            // Action to do when de robot is dropped here
             @Override
             public boolean importData(TransferHandler.TransferSupport support) {
                 boolean accept = false;
@@ -233,34 +236,35 @@ public class Kitchen extends JPanel implements MouseListener, MouseMotionListene
 
     }
 
-    public void setMap(Environment env) {
-        for (int i = 0; i < tiles.length; i++) {
-            for (int j = 0; j < tiles[0].length; j++) {
-                tiles[i][j].setIsObstacleReference(env.getIsObstacleReference(i, j));
-            }
-
-        }
-    }
+    // public void setEnv(Environment<Robot> env) {
+    //
+    // // Map creation
+    // for (int i = 0; i < tiles.length; i++) {
+    // for (int j = 0; j < tiles[0].length; j++) {
+    // tiles[i][j].setIsObstacleReference(env.getIsObstacleReference(i, j));
+    // }
+    // }
+    // }
 
     public void setObstacleImage(BufferedImage im) {
         Tile.setObstacleImage(im);
     }
-    
-    public void setRobotDisplayerSpeedFactor(double speedFactor){
+
+    public void setRobotDisplayerSpeedFactor(double speedFactor) {
         this.robotDisplayer.setSpeedFactor(speedFactor);
     }
 
-//    public void refresh() {
-//        revalidate();
-//        repaint();
-//    }
-//    @Override
-//    public void repaint(){
-//        if(this.getGraphics() != null){
-//            this.update(this.getGraphics());
-//            
-//        }
-//    }
+    // public void refresh() {
+    // revalidate();
+    // repaint();
+    // }
+    // @Override
+    // public void repaint(){
+    // if(this.getGraphics() != null){
+    // this.update(this.getGraphics());
+    //
+    // }
+    // }
     @Override
     public void mouseClicked(MouseEvent e) {
     }
@@ -274,7 +278,8 @@ public class Kitchen extends JPanel implements MouseListener, MouseMotionListene
 
     @Override
     @SuppressWarnings("empty-statement")
-    public void mouseReleased(MouseEvent e) {;
+    public void mouseReleased(MouseEvent e) {
+        ;
         this.buttonPressed = -1;
     }
 
@@ -336,11 +341,11 @@ public class Kitchen extends JPanel implements MouseListener, MouseMotionListene
     public void repaintRobotAndTiles() {
         Point center = this.robotDisplayer.getTileIndices();
         int[][] offset = {
-            {0, 0},
-            {1, 0},
-            {0, 1},
-            {-1, 0},
-            {0, -1}
+                { 0, 0 },
+                { 1, 0 },
+                { 0, 1 },
+                { -1, 0 },
+                { 0, -1 }
         };
 
         for (int i = 0; i < offset.length; i++) {
@@ -351,7 +356,7 @@ public class Kitchen extends JPanel implements MouseListener, MouseMotionListene
             }
             this.tiles[x][y].notifyChange();
         }
-        
+
         this.repaint();
     }
 
@@ -364,4 +369,18 @@ public class Kitchen extends JPanel implements MouseListener, MouseMotionListene
         return clon;
     }
 
+    public void paintAll() {
+        for (int i = 0; i < costat; i++) {
+            for (int j = 0; j < costat; j++) {
+                tiles[i][j].notifyChange();
+
+                if (tiles[i][j].isObstacle()) {
+                    tiles[i][j].setIsObstacle(true);
+                }
+
+            }
+        }
+
+        this.repaint();
+    }
 }
