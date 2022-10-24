@@ -1,8 +1,6 @@
 package productionrules;
 
-import java.io.Serializable;
-
-public class Characteristic implements Serializable {
+public class Characteristic {
     private boolean value = true;
     private String label;
 
@@ -14,13 +12,13 @@ public class Characteristic implements Serializable {
         return value;
     }
 
-    public void setValue(boolean value){
+    public void setValue(boolean value) {
         this.value = value;
     }
 
     @Override
     public String toString() {
-        return label;
+        return label + ": " + value;
     }
 
 }

@@ -4,12 +4,12 @@ import java.io.Serializable;
 
 public class MutableBoolean implements Serializable {
     private boolean value;
-    
-    public MutableBoolean(){
+
+    public MutableBoolean() {
         value = false;
     }
-    
-    public MutableBoolean(boolean value){
+
+    public MutableBoolean(boolean value) {
         this.value = value;
     }
 
@@ -20,10 +20,9 @@ public class MutableBoolean implements Serializable {
     public void setValue(boolean value) {
         this.value = value;
     }
-    
-    public void toggle(){
+
+    public void toggle() {
         this.value = !this.value;
     }
-    
-    
+
 }

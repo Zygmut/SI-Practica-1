@@ -1,7 +1,6 @@
 
 package environment;
 
-import agent.Robot;
 import java.awt.Point;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -9,16 +8,19 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+
+import agent.Executable;
+import agent.GridAgent;
 import utils.MutableBoolean;
 
-public class Environment implements Serializable {
+public class Environment<T> implements Serializable {
 
     private MutableBoolean[][] map;
-    private Robot robot;
+    private T agent;
 
     public Environment() {
         this.map = null;
-        this.robot = null;
+        this.agent = null;
     }
 
     public Environment(int n) {
@@ -28,7 +30,6 @@ public class Environment implements Serializable {
                 map[i][j] = new MutableBoolean();
             }
         }
-        this.robot = new Robot();
     }
 
     public Environment(MutableBoolean[][] map) {
@@ -51,25 +52,27 @@ public class Environment implements Serializable {
         this.map[i][j].toggle();
     }
 
-    public void setRobot(Robot robot) {
-        this.robot = robot;
-    }
-    
-    public Robot getRobot(){
-        return this.robot;
+    public void setAgent(T agent) {
+        this.agent = agent;
     }
 
+    public T getAgent() {
+        return this.agent;
+    }
+
+    @SuppressWarnings("unchecked")
     public void runIteration() {
-        robot.processPerceptions(getPerceptions(robot));
-        // robot.checkBC().execute();
+        ((GridAgent<Executable>) agent).processPerceptions(getPerceptions(agent));
+        ((GridAgent<Executable>) agent).checkBC().execute((GridAgent<Executable>) agent);
 
         // TODO: wait animation
     }
 
-    private boolean[] getPerceptions(Robot robot) {
+    @SuppressWarnings("unchecked")
+    private boolean[] getPerceptions(T agent) {
         boolean[] perceptions = new boolean[8];
         int idx = 0;
-        Point robotPos = robot.getPosition();
+        Point robotPos = ((GridAgent<T>) agent).getPosition();
 
         for (int y = robotPos.y - 1; y <= robotPos.y + 1; y++) {
             for (int x = robotPos.x - 1; x <= robotPos.x + 1; x++) {
@@ -90,22 +93,22 @@ public class Environment implements Serializable {
         return perceptions;
     }
 
-    public static Environment useMap(String path) {
+    public static MutableBoolean[][] useMap(String path) {
         String filePath = path;
         if (!path.endsWith(".map")) {
             filePath = path + ".map";
         }
 
-        Environment env = null;
+        MutableBoolean[][] map = null;
         try {
             ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filePath));
-            env = (Environment) ois.readObject();
+            map = (MutableBoolean[][]) ois.readObject();
             ois.close();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
 
-        return env;
+        return map;
     }
 
     public void saveMap(String path) {
@@ -116,7 +119,7 @@ public class Environment implements Serializable {
 
         try {
             ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filePath));
-            oos.writeObject(this);
+            oos.writeObject(this.map);
             oos.close();
         } catch (IOException e) {
             e.printStackTrace();
