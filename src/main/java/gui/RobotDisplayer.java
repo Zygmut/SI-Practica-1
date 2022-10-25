@@ -134,8 +134,8 @@ public class RobotDisplayer extends JComponent {
             int multiplierX = (int) Math.signum(Integer.compare(robotCoordinates.x, this.position.x));
             int multiplierY = (int) Math.signum(Integer.compare(robotCoordinates.y, this.position.y));
 
-            int currentIncX = (int)(this.speedFactor * this.sizeFactor * baseIncMovement * multiplierX);
-            int currentIncY = (int)(this.speedFactor * this.sizeFactor * baseIncMovement * multiplierY);
+            int currentIncX = (int)(this.speedFactor * Math.max(this.sizeFactor, 1) * baseIncMovement * multiplierX);
+            int currentIncY = (int)(this.speedFactor * Math.max(this.sizeFactor, 1) * baseIncMovement * multiplierY);
 
             this.rotate(kitchen, this.robot.getPosition().x, this.robot.getPosition().y);
 
