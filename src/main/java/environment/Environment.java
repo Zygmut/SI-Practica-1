@@ -76,6 +76,17 @@ public class Environment<T> implements Serializable {
         int idx = 0;
         Point robotPos = ((GridAgent<T>) agent).getPosition();
 
+        // y-1 , x-1 NW
+        // y-1 , x   W
+        // y-1 , x+1 SW
+        // y   , x-1 N
+        // y   , x   NONE
+        // y   , x+1 S
+        // y+1 , x-1 NE
+        // y+1 , x   E
+        // y+1 , x+1 SE
+        
+        
         for (int y = robotPos.y - 1; y <= robotPos.y + 1; y++) {
             for (int x = robotPos.x - 1; x <= robotPos.x + 1; x++) {
                 if (x == robotPos.x && y == robotPos.y) {

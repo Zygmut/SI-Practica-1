@@ -16,7 +16,8 @@ public class Robot extends GridAgent<Executable> {
 //                System.out.println("[Robot.java] Action: " + this.toString());
                 ((Robot) robot).setLooking(LookDirection.NORTH);
                 Point currPosition = ((Robot) robot).getPosition();
-                ((Robot) robot).setPosition(currPosition.x, currPosition.y - 1);
+//                ((Robot) robot).setPosition(currPosition.x, currPosition.y - 1);
+                ((Robot) robot).setPosition(currPosition.x - 1, currPosition.y);
             }
         },
         MOVE_SOUTH {
@@ -26,7 +27,8 @@ public class Robot extends GridAgent<Executable> {
 //                System.out.println("[Robot.java] Action: " + this.toString());
                 ((Robot) robot).setLooking(LookDirection.SOUTH);
                 Point currPosition = ((Robot) robot).getPosition();
-                ((Robot) robot).setPosition(currPosition.x, currPosition.y + 1);
+//                ((Robot) robot).setPosition(currPosition.x, currPosition.y + 1);
+                ((Robot) robot).setPosition(currPosition.x + 1, currPosition.y);
             }
         },
         MOVE_EAST {
@@ -36,7 +38,8 @@ public class Robot extends GridAgent<Executable> {
 //                System.out.println("[Robot.java] Action: " + this.toString());
                 ((Robot) robot).setLooking(LookDirection.EAST);
                 Point currPosition = ((Robot) robot).getPosition();
-                ((Robot) robot).setPosition(currPosition.x + 1, currPosition.y);
+//                ((Robot) robot).setPosition(currPosition.x + 1, currPosition.y);
+                ((Robot) robot).setPosition(currPosition.x, currPosition.y + 1);
             }
         },
         MOVE_WEST {
@@ -46,7 +49,8 @@ public class Robot extends GridAgent<Executable> {
 //                System.out.println("[Robot.java] Action: " + this.toString());
                 ((Robot) robot).setLooking(LookDirection.WEST);
                 Point currPosition = ((Robot) robot).getPosition();
-                ((Robot) robot).setPosition(currPosition.x - 1, currPosition.y);
+//                ((Robot) robot).setPosition(currPosition.x - 1, currPosition.y);
+                ((Robot) robot).setPosition(currPosition.x, currPosition.y - 1);
             }
         },
         NOT_MOVE {
@@ -60,21 +64,44 @@ public class Robot extends GridAgent<Executable> {
         }
     }
 
+//    public enum Labels {
+//        Wall_NW,
+//        Not_Wall_NW,
+//        Wall_N,
+//        Not_Wall_N,
+//        Wall_NE,
+//        Not_Wall_NE,
+//        Wall_W,
+//        Not_Wall_W,
+//        Wall_E,
+//        Not_Wall_E,
+//        Wall_SW,
+//        Not_Wall_SW,
+//        Wall_S,
+//        Not_Wall_S,
+//        Wall_SE,
+//        Not_Wall_SE,
+//        Looking_North,
+//        Looking_East,
+//        Looking_South,
+//        Looking_West
+//    };
+    
     public enum Labels {
         Wall_NW,
         Not_Wall_NW,
-        Wall_N,
-        Not_Wall_N,
-        Wall_NE,
-        Not_Wall_NE,
         Wall_W,
         Not_Wall_W,
-        Wall_E,
-        Not_Wall_E,
         Wall_SW,
         Not_Wall_SW,
+        Wall_N,
+        Not_Wall_N,
         Wall_S,
         Not_Wall_S,
+        Wall_NE,
+        Not_Wall_NE,
+        Wall_E,
+        Not_Wall_E,
         Wall_SE,
         Not_Wall_SE,
         Looking_North,
@@ -134,6 +161,7 @@ public class Robot extends GridAgent<Executable> {
 
     private void initBC() {
         
+        //Trapped rule
         this.addProdRule(
                 new int[]{Labels.Wall_N.ordinal(), Labels.Wall_E.ordinal(),
                     Labels.Wall_S.ordinal(), Labels.Wall_W.ordinal()},
