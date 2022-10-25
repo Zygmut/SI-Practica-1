@@ -48,6 +48,10 @@ public class Robot extends GridAgent<Executable> {
                 Point currPosition = ((Robot) robot).getPosition();
                 ((Robot) robot).setPosition(currPosition.x - 1, currPosition.y);
             }
+        },
+        NOT_MOVE {
+            @Override
+            public void execute(Object robot) {}
         };
 
         public void execute(
@@ -129,6 +133,12 @@ public class Robot extends GridAgent<Executable> {
     }
 
     private void initBC() {
+        
+        this.addProdRule(
+                new int[]{Labels.Wall_N.ordinal(), Labels.Wall_E.ordinal(),
+                    Labels.Wall_S.ordinal(), Labels.Wall_W.ordinal()},
+                Robot.Action.NOT_MOVE);
+        
         this.addProdRule(
                 new int[]{Labels.Not_Wall_N.ordinal(), Labels.Wall_NW.ordinal(),
                     Labels.Looking_East.ordinal()},
