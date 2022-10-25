@@ -11,11 +11,6 @@ public class Main {
     public void start() {
         RobotGui gui = new RobotGui();
         gui.showGui();
-
-//        Environment<Robot> env = new Environment<>(Environment.useMap(".\\test_maps\\test-8x8.map"));
-//        Robot r = new Robot();
-//        env.setAgent(r);
-//        gui.setEnv(env);
     }
 
 }
