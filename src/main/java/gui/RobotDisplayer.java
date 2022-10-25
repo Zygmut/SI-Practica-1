@@ -82,8 +82,8 @@ public class RobotDisplayer extends JComponent {
         this.robot.setPosition(i, j);
         this.width = (int) (costat * 0.9);
         this.position = this.calculatePositionFromTileIndices(i, j, costat, borde);
-        this.prevPosX = this.position.x + 1; 
-        this.prevPosY = this.position.y;
+        this.prevPosX = i; 
+        this.prevPosY = j;
         this.costat = costat;
         this.borde = borde;
         this.rotationAngle = 0;
