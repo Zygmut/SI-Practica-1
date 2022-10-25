@@ -68,7 +68,6 @@ public class Environment<T> implements Serializable {
     public void runIteration() {
         ((GridAgent<Executable>) agent).processPerceptions(getPerceptions(agent));
         ((GridAgent<Executable>) agent).checkBC().execute((GridAgent<Executable>) agent);
-        System.out.println("step");
     }
 
     @SuppressWarnings("unchecked")

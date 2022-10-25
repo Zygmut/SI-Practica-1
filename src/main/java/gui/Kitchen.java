@@ -123,6 +123,13 @@ public class Kitchen extends JPanel implements MouseListener, MouseMotionListene
 
             @Override
             public boolean canImport(TransferHandler.TransferSupport support) {
+                Point point = support.getDropLocation().getDropPoint();
+                int i = getIndex(point.y);
+                int j = getIndex(point.x);
+
+                if (!isValid(i) || !isValid(j) || tiles[i][j].isObstacle()) {
+                    return false;
+                }
                 return true;
             }
 
