@@ -68,8 +68,7 @@ public class Environment<T> implements Serializable {
     public void runIteration() {
         ((GridAgent<Executable>) agent).processPerceptions(getPerceptions(agent));
         ((GridAgent<Executable>) agent).checkBC().execute((GridAgent<Executable>) agent);
-
-        // TODO: wait animation
+        System.out.println("step");
     }
 
     @SuppressWarnings("unchecked")
@@ -85,7 +84,7 @@ public class Environment<T> implements Serializable {
                 }
 
                 try {
-                    perceptions[idx] = map[y][x].is();
+                    perceptions[idx] = map[x][y].is();
                 } catch (ArrayIndexOutOfBoundsException e) {
                     // Map outer perimeter
                     perceptions[idx] = true;

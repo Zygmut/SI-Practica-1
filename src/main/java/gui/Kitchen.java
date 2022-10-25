@@ -41,7 +41,6 @@ public class Kitchen extends JPanel implements MouseListener, MouseMotionListene
     private BufferedImage starterImage = null;
     private Graphics2D gAux = null;
     private BufferedImage biAux = null;
-    private boolean isInAnimation = false;
 
     // Constructor del tauler
     public Kitchen(int n, RobotGui gui, Environment<Robot> env, RobotDisplayer robotDisplayer) {
@@ -63,7 +62,7 @@ public class Kitchen extends JPanel implements MouseListener, MouseMotionListene
             @Override
             public void keyPressed(KeyEvent e) {
 
-                if (isInAnimation || !robotDisplayer.isActive())
+                if (!robotDisplayer.isActive())
                     return;
 
                 ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -71,67 +70,45 @@ public class Kitchen extends JPanel implements MouseListener, MouseMotionListene
                 switch (e.getKeyCode()) {
                     case KeyEvent.VK_LEFT -> {
                         executor.execute(() -> {
-                            isInAnimation = true;
-                            robotDisplayer.temporalMoveRobot(0, -1); // WEAST
-                            robotDisplayer.move(Kitchen.this);
-                            isInAnimation = false;
+                            robotDisplayer.manualMoveRobot(0, -1, Kitchen.this); // WEAST
                         });
 
                     }
                     case KeyEvent.VK_RIGHT -> {
                         executor.execute(() -> {
-                            isInAnimation = true;
-                            robotDisplayer.temporalMoveRobot(0, 1); // EAST
-                            robotDisplayer.move(Kitchen.this);
-                            isInAnimation = false;
+                            robotDisplayer.manualMoveRobot(0, 1, Kitchen.this); // EAST
                         });
 
                     }
                     case KeyEvent.VK_UP -> {
                         executor.execute(() -> {
-                            isInAnimation = true;
-                            robotDisplayer.temporalMoveRobot(-1, 0); // NORTH
-                            robotDisplayer.move(Kitchen.this);
-                            isInAnimation = false;
+                            robotDisplayer.manualMoveRobot(-1, 0, Kitchen.this); // NORTH
                         });
 
                     }
                     case KeyEvent.VK_DOWN -> {
                         executor.execute(() -> {
-                            isInAnimation = true;
-                            robotDisplayer.temporalMoveRobot(1, 0); // SOUTH
-                            robotDisplayer.move(Kitchen.this);
-                            isInAnimation = false;
+                            robotDisplayer.manualMoveRobot(1, 0, Kitchen.this); // SOUTH
                         });
 
                     }
                     case KeyEvent.VK_SPACE -> {
                         executor.execute(() -> {
-                            isInAnimation = true;
-                            robotDisplayer.temporalMoveRobot(-1, 0); // NORTH
-                            robotDisplayer.move(Kitchen.this);
+                            robotDisplayer.manualMoveRobot(-1, 0, Kitchen.this); // NORTH
 
-                            robotDisplayer.temporalMoveRobot(-1, 0); // NORTH
-                            robotDisplayer.move(Kitchen.this);
+                            robotDisplayer.manualMoveRobot(-1, 0, Kitchen.this); // NORTH
 
-                            robotDisplayer.temporalMoveRobot(0, -1); // WEAST
-                            robotDisplayer.move(Kitchen.this);
+                            robotDisplayer.manualMoveRobot(0, -1, Kitchen.this); // WEAST
 
-                            robotDisplayer.temporalMoveRobot(0, -1); // WEAST
-                            robotDisplayer.move(Kitchen.this);
+                            robotDisplayer.manualMoveRobot(0, -1, Kitchen.this); // WEAST
 
-                            robotDisplayer.temporalMoveRobot(1, 0); // SOUTH
-                            robotDisplayer.move(Kitchen.this);
+                            robotDisplayer.manualMoveRobot(1, 0, Kitchen.this); // SOUTH
 
-                            robotDisplayer.temporalMoveRobot(1, 0); // SOUTH
-                            robotDisplayer.move(Kitchen.this);
+                            robotDisplayer.manualMoveRobot(1, 0, Kitchen.this); // SOUTH
 
-                            robotDisplayer.temporalMoveRobot(0, 1); // EAST
-                            robotDisplayer.move(Kitchen.this);
+                            robotDisplayer.manualMoveRobot(0, 1, Kitchen.this); // EAST
 
-                            robotDisplayer.temporalMoveRobot(0, 1); // EAST
-                            robotDisplayer.move(Kitchen.this);
-                            isInAnimation = false;
+                            robotDisplayer.manualMoveRobot(0, 1, Kitchen.this); // EAST
                         });
 
                     }
@@ -392,6 +369,11 @@ public class Kitchen extends JPanel implements MouseListener, MouseMotionListene
             }
         }
         this.repaint();
+    }
+    
+    public Object moveRobot(){
+        this.robotDisplayer.move(this);
+        return null;
     }
     
     

@@ -1,7 +1,6 @@
 package agent;
 
 import java.awt.Point;
-
 import productionrules.BC;
 import productionrules.Characteristic;
 
@@ -12,8 +11,9 @@ public class Robot extends GridAgent<Executable> {
         MOVE_NORTH {
 
             @Override
-            public void execute(Object robot) {
-                System.out.println("[Robot.java] Action: " + this.toString());
+            public void execute(
+                    Object robot) {
+//                System.out.println("[Robot.java] Action: " + this.toString());
                 ((Robot) robot).setLooking(LookDirection.NORTH);
                 Point currPosition = ((Robot) robot).getPosition();
                 ((Robot) robot).setPosition(currPosition.x, currPosition.y - 1);
@@ -21,8 +21,9 @@ public class Robot extends GridAgent<Executable> {
         },
         MOVE_SOUTH {
             @Override
-            public void execute(Object robot) {
-                System.out.println("[Robot.java] Action: " + this.toString());
+            public void execute(
+                    Object robot) {
+//                System.out.println("[Robot.java] Action: " + this.toString());
                 ((Robot) robot).setLooking(LookDirection.SOUTH);
                 Point currPosition = ((Robot) robot).getPosition();
                 ((Robot) robot).setPosition(currPosition.x, currPosition.y + 1);
@@ -30,8 +31,9 @@ public class Robot extends GridAgent<Executable> {
         },
         MOVE_EAST {
             @Override
-            public void execute(Object robot) {
-                System.out.println("[Robot.java] Action: " + this.toString());
+            public void execute(
+                    Object robot) {
+//                System.out.println("[Robot.java] Action: " + this.toString());
                 ((Robot) robot).setLooking(LookDirection.EAST);
                 Point currPosition = ((Robot) robot).getPosition();
                 ((Robot) robot).setPosition(currPosition.x + 1, currPosition.y);
@@ -39,15 +41,17 @@ public class Robot extends GridAgent<Executable> {
         },
         MOVE_WEST {
             @Override
-            public void execute(Object robot) {
-                System.out.println("[Robot.java] Action: " + this.toString());
+            public void execute(
+                    Object robot) {
+//                System.out.println("[Robot.java] Action: " + this.toString());
                 ((Robot) robot).setLooking(LookDirection.WEST);
                 Point currPosition = ((Robot) robot).getPosition();
                 ((Robot) robot).setPosition(currPosition.x - 1, currPosition.y);
             }
         };
 
-        public void execute(Robot robot) {
+        public void execute(
+                Robot robot) {
             System.out.println("NOT IMPLEMENTED");
         }
     }
@@ -90,6 +94,8 @@ public class Robot extends GridAgent<Executable> {
         for (int i = 0; i < characteristics.length; i++) {
             characteristics[i] = new Characteristic(Labels.values()[i].name());
         }
+
+        this.initBC();
     }
 
     public Robot(int x, int y) {
@@ -102,6 +108,8 @@ public class Robot extends GridAgent<Executable> {
         for (int i = 0; i < characteristics.length; i++) {
             characteristics[i] = new Characteristic(Labels.values()[i].name());
         }
+
+        this.initBC();
 
     }
 
@@ -116,6 +124,65 @@ public class Robot extends GridAgent<Executable> {
             characteristics[i] = new Characteristic(Labels.values()[i].name());
         }
 
+        this.initBC();
+
+    }
+
+    private void initBC() {
+        this.addProdRule(
+                new int[]{Labels.Not_Wall_N.ordinal(), Labels.Wall_NW.ordinal(),
+                    Labels.Looking_East.ordinal()},
+                Robot.Action.MOVE_NORTH);
+
+        this.addProdRule(
+                new int[]{Labels.Not_Wall_E.ordinal(), Labels.Wall_NE.ordinal(),
+                    Labels.Looking_South.ordinal()},
+                Robot.Action.MOVE_EAST);
+
+        this.addProdRule(
+                new int[]{Labels.Not_Wall_S.ordinal(), Labels.Wall_SE.ordinal(),
+                    Labels.Looking_West.ordinal()},
+                Robot.Action.MOVE_SOUTH);
+
+        this.addProdRule(
+                new int[]{Labels.Not_Wall_W.ordinal(), Labels.Wall_SW.ordinal(),
+                    Labels.Looking_North.ordinal()},
+                Robot.Action.MOVE_WEST);
+
+        this.addProdRule(
+                new int[]{Labels.Not_Wall_N.ordinal(), Labels.Wall_W.ordinal(),
+                    Labels.Looking_North.ordinal()},
+                Robot.Action.MOVE_NORTH);
+
+        this.addProdRule(
+                new int[]{Labels.Not_Wall_E.ordinal(), Labels.Wall_N.ordinal(),
+                    Labels.Looking_East.ordinal()},
+                Robot.Action.MOVE_EAST);
+
+        this.addProdRule(
+                new int[]{Labels.Not_Wall_S.ordinal(), Labels.Wall_E.ordinal(),
+                    Labels.Looking_South.ordinal()},
+                Robot.Action.MOVE_SOUTH);
+
+        this.addProdRule(
+                new int[]{Labels.Not_Wall_W.ordinal(), Labels.Wall_S.ordinal(),
+                    Labels.Looking_West.ordinal()},
+                Robot.Action.MOVE_WEST);
+
+        this.addProdRule(new int[]{Labels.Not_Wall_N.ordinal(), Labels.Wall_W.ordinal()},
+                Robot.Action.MOVE_NORTH);
+
+        this.addProdRule(new int[]{Labels.Not_Wall_E.ordinal(), Labels.Wall_N.ordinal()},
+                Robot.Action.MOVE_EAST);
+
+        this.addProdRule(new int[]{Labels.Not_Wall_S.ordinal(), Labels.Wall_E.ordinal()},
+                Robot.Action.MOVE_SOUTH);
+
+        this.addProdRule(new int[]{Labels.Not_Wall_W.ordinal(), Labels.Wall_S.ordinal()},
+                Robot.Action.MOVE_WEST);
+        
+        //DEFAULT ACTION
+        this.addProdRule(new int[]{}, Robot.Action.MOVE_NORTH);
     }
 
     public LookDirection getLooking() {
@@ -126,6 +193,7 @@ public class Robot extends GridAgent<Executable> {
         this.looking = looking;
     }
 
+    @Override
     public void processPerceptions(boolean[] perceptions) {
 
         for (int i = 0; i < perceptions.length; i++) {

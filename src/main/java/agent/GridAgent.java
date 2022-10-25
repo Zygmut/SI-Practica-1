@@ -32,8 +32,7 @@ public abstract class GridAgent<T> {
         return this.bc.toStringEvaluated();
     }
 
-    public void processPerceptions(boolean[] perceptions) {
-    };
+    public abstract void processPerceptions(boolean[] perceptions);
 
     public void setCharacteristics(Characteristic[] characteristics) {
         this.characteristics = characteristics;

@@ -5,7 +5,7 @@ public class Condition {
     private Characteristic[] characteristics;
 
     public Condition() {
-        characteristics = null;
+        characteristics = new Characteristic[0];
     }
 
     public Condition(Characteristic[] characteristics) {

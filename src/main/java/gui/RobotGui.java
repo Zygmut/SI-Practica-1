@@ -3,6 +3,10 @@ package gui;
 import agent.Robot;
 import environment.Environment;
 import java.awt.BorderLayout;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
@@ -18,6 +22,8 @@ public class RobotGui extends JFrame {
     private Kitchen kitchen;
     private OptionsPanel options;
     private Environment<Robot> env;
+    private ExecutorService environmentExecutor = Executors.newSingleThreadExecutor();
+    private ExecutorService animationExecutor = Executors.newSingleThreadExecutor();
 
     public RobotGui() {
 
@@ -112,6 +118,43 @@ public class RobotGui extends JFrame {
 
     public void setRobotActive(boolean value) {
         this.options.setRobotActive(value);
+        if(value){
+            environmentExecutor.execute(()->{
+                Future<Object> future = null;
+                while(true){
+                    
+                    // Wait for animation to finish
+                    if(future != null){
+                        try {
+                            future.get();
+                        } catch (InterruptedException ex) {
+                            Logger.getLogger(RobotGui.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (ExecutionException ex) {
+                            Logger.getLogger(RobotGui.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                    
+                    // Run iteration of the environment
+                    this.env.runIteration();
+                    
+                    // Execute animation
+                    future = animationExecutor.submit(()->{
+                        return this.kitchen.moveRobot();
+                    });
+                    
+                    
+                }
+            });
+        }else{
+            if(!environmentExecutor.isShutdown()){
+                environmentExecutor.shutdown();
+                environmentExecutor.shutdownNow();
+                if(!animationExecutor.isShutdown()){
+                    animationExecutor.shutdown();
+                    animationExecutor.shutdownNow();
+                }
+            }
+        }
     }
 
     public void setRobotDisplayerSpeedFactor(double speedFactor) {
@@ -143,6 +186,10 @@ public class RobotGui extends JFrame {
     
     public void resetKitchen(){
         this.kitchen.resetAll();
+    }
+    
+    private void moveRobot(){
+        
     }
 
 }

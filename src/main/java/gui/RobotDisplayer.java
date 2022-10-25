@@ -54,6 +54,7 @@ public class RobotDisplayer extends JComponent {
     private int costat = 1;
     private int borde = 1;
     private int rotationAngle = 0;
+    private boolean isInAnimation = false;
     
 
     public RobotDisplayer(Robot robot) {
@@ -106,8 +107,14 @@ public class RobotDisplayer extends JComponent {
         return robotTilesPosition.x == i && robotTilesPosition.y == j;
     }
     
-    public void temporalMoveRobot(int i, int j){
-        this.robot.setPosition(this.robot.getPosition().x + i, this.robot.getPosition().y + j);
+    public void manualMoveRobot(int i, int j, Kitchen kitchen){
+        
+        if(isActive() && !isInAnimation){    
+            isInAnimation = true;
+            this.robot.setPosition(this.robot.getPosition().x + i, this.robot.getPosition().y + j);
+            this.moveInternal(kitchen);
+            isInAnimation = false;
+        }
     }
     
     public void setSpeedFactor(double speedFactor){
@@ -115,7 +122,14 @@ public class RobotDisplayer extends JComponent {
     }
 
     public void move(Kitchen kitchen) {
-        if(isActive()){
+        if(isActive() && !isInAnimation){
+            isInAnimation = true;
+            moveInternal(kitchen);
+            isInAnimation = false;
+        }
+    }
+    
+    private void moveInternal(Kitchen kitchen){
             Point robotCoordinates = calculatePositionFromTileIndices(this.robot.getPosition().x, this.robot.getPosition().y, this.costat, this.borde);
             int multiplierX = (int) Math.signum(Integer.compare(robotCoordinates.x, this.position.x));
             int multiplierY = (int) Math.signum(Integer.compare(robotCoordinates.y, this.position.y));
@@ -150,7 +164,6 @@ public class RobotDisplayer extends JComponent {
 
                 kitchen.repaintRobotAndTiles();
             }
-        }
     }
     
     private void rotate(Kitchen kitchen, int targetPosX, int targetPosY){
