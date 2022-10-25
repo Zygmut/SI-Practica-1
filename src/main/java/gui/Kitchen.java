@@ -371,9 +371,9 @@ public class Kitchen extends JPanel implements MouseListener, MouseMotionListene
         this.repaint();
     }
     
-    public Object moveRobot(){
+    public Boolean moveRobot(){
         this.robotDisplayer.move(this);
-        return null;
+        return this.robotDisplayer.isActive();
     }
     
     

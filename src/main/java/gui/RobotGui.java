@@ -120,13 +120,13 @@ public class RobotGui extends JFrame {
         this.options.setRobotActive(value);
         if(value){
             environmentExecutor.execute(()->{
-                Future<Object> future = null;
+                Future<Boolean> future = null;
                 while(true){
-                    
                     // Wait for animation to finish
                     if(future != null){
                         try {
-                            future.get();
+                            boolean robotActive = future.get();
+                            if(!robotActive) return;
                         } catch (InterruptedException ex) {
                             Logger.getLogger(RobotGui.class.getName()).log(Level.SEVERE, null, ex);
                         } catch (ExecutionException ex) {
@@ -146,6 +146,7 @@ public class RobotGui extends JFrame {
                 }
             });
         }else{
+            
             if(!environmentExecutor.isShutdown()){
                 environmentExecutor.shutdown();
                 environmentExecutor.shutdownNow();
