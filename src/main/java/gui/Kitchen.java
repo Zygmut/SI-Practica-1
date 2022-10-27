@@ -3,12 +3,10 @@ package gui;
 import agent.Robot;
 import environment.Environment;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -23,21 +21,19 @@ import javax.swing.TransferHandler;
 
 public class Kitchen extends JPanel implements MouseListener, MouseMotionListener {
 
-    private final DataFlavor SUPPORTED_DATA_FLAVOR = DataFlavor.imageFlavor;
 
     // Atributs propis del tauler
     private Tile[][] tiles;
-    private Color colorMarc = new Color(80, 80, 80);
     private Color colorBorde = new Color(200, 200, 200);
     private int costat;
     private int costatCasella;
-    private int dimsBorde = 40;
+    private final int dimsBordeBase = 40;
+    private int dimsBorde = dimsBordeBase;
     private int pixelsCostat = 800;
     private Dimension dimensions = new Dimension(pixelsCostat + (2 * dimsBorde) + 1,
             pixelsCostat + (2 * dimsBorde) + 1);
     private int buttonPressed = -1;
     private RobotDisplayer robotDisplayer;
-    private RobotGui gui;
     private BufferedImage starterImage = null;
     private Graphics2D gAux = null;
     private BufferedImage biAux = null;
@@ -52,12 +48,11 @@ public class Kitchen extends JPanel implements MouseListener, MouseMotionListene
         this.tiles = new Tile[costat][costat];
         boolean fons = false;
         this.robotDisplayer = robotDisplayer;
-        // this.setDoubleBuffered(false);
 
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
 
-        // ****************************** DELETE ********************************
+        // ****************************** TEST ********************************
         this.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -117,7 +112,7 @@ public class Kitchen extends JPanel implements MouseListener, MouseMotionListene
             }
         });
 
-        // ****************************** DELETE ********************************
+        // ****************************** TEST ********************************
         // Set transfer handler to manage the drop on the panel for the robot
         this.setTransferHandler(new TransferHandler("icon") {
 
@@ -140,8 +135,6 @@ public class Kitchen extends JPanel implements MouseListener, MouseMotionListene
                 if (canImport(support)) {
                     try {
                         Transferable t = support.getTransferable();
-                        Object value = t.getTransferData(support.getDataFlavors()[0]);
-                        Component component = support.getComponent();
                         accept = setRobotLocation(support.getDropLocation().getDropPoint());
                     } catch (Exception exp) {
                         exp.printStackTrace();

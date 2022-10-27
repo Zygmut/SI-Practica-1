@@ -47,7 +47,7 @@ public class RobotGui extends JFrame {
         } catch (InterruptedException ex) {
             Logger.getLogger(RobotGui.class.getName()).log(Level.SEVERE, null, ex);
         }
-        this.setMinimumSize(this.getSize());
+        this.setResizable(false);
         this.setLocationRelativeTo(null);
         this.setVisible(true);
     }
