@@ -295,7 +295,7 @@ public class Kitchen extends JPanel implements MouseListener, MouseMotionListene
         if (!isValid(i) || !isValid(j)) {
             return;
         }
-        if (this.robotDisplayer.isOnTile(i, j)) {
+        if (this.robotDisplayer.isActive() && this.robotDisplayer.isOnTile(i, j)) {
             return;
         }
 
