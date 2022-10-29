@@ -167,6 +167,8 @@ public class Robot extends GridAgent<Executable> {
                     Labels.Wall_S.ordinal(), Labels.Wall_W.ordinal()},
                 Robot.Action.NOT_MOVE);
         
+        // Corners
+        
         this.addProdRule(
                 new int[]{Labels.Not_Wall_N.ordinal(), Labels.Wall_NW.ordinal(),
                     Labels.Looking_East.ordinal()},
@@ -187,6 +189,9 @@ public class Robot extends GridAgent<Executable> {
                     Labels.Looking_North.ordinal()},
                 Robot.Action.MOVE_WEST);
 
+        // Basic movement with priority to choose the movement that conservates 
+        // the looking direction
+        
         this.addProdRule(
                 new int[]{Labels.Not_Wall_N.ordinal(), Labels.Wall_W.ordinal(),
                     Labels.Looking_North.ordinal()},
@@ -207,6 +212,9 @@ public class Robot extends GridAgent<Executable> {
                     Labels.Looking_West.ordinal()},
                 Robot.Action.MOVE_WEST);
 
+        
+        // Basic movement
+        
         this.addProdRule(new int[]{Labels.Not_Wall_N.ordinal(), Labels.Wall_W.ordinal()},
                 Robot.Action.MOVE_NORTH);
 
