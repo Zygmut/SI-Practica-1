@@ -18,7 +18,7 @@ public class Characteristic {
 
     @Override
     public String toString() {
-        return label + ": " + value;
+        return label;
     }
 
 }

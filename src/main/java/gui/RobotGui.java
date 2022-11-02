@@ -100,6 +100,7 @@ public class RobotGui extends JFrame {
 
         this.env = new Environment<>(n);
         this.env.setAgent(new Robot());
+        System.out.println(this.env.getAgent().printBC());
         RobotDisplayer robotDisplayer = new RobotDisplayer((Robot) env.getAgent());
 
         this.options.setRobotDisplayerActiveReference(robotDisplayer.getIsActiveReference());

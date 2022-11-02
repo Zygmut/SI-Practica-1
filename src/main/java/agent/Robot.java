@@ -13,10 +13,8 @@ public class Robot extends GridAgent<Executable> {
             @Override
             public void execute(
                     Object robot) {
-//                System.out.println("[Robot.java] Action: " + this.toString());
                 ((Robot) robot).setLooking(LookDirection.NORTH);
                 Point currPosition = ((Robot) robot).getPosition();
-//                ((Robot) robot).setPosition(currPosition.x, currPosition.y - 1);
                 ((Robot) robot).setPosition(currPosition.x - 1, currPosition.y);
             }
         },
@@ -24,10 +22,8 @@ public class Robot extends GridAgent<Executable> {
             @Override
             public void execute(
                     Object robot) {
-//                System.out.println("[Robot.java] Action: " + this.toString());
                 ((Robot) robot).setLooking(LookDirection.SOUTH);
                 Point currPosition = ((Robot) robot).getPosition();
-//                ((Robot) robot).setPosition(currPosition.x, currPosition.y + 1);
                 ((Robot) robot).setPosition(currPosition.x + 1, currPosition.y);
             }
         },
@@ -35,10 +31,8 @@ public class Robot extends GridAgent<Executable> {
             @Override
             public void execute(
                     Object robot) {
-//                System.out.println("[Robot.java] Action: " + this.toString());
                 ((Robot) robot).setLooking(LookDirection.EAST);
                 Point currPosition = ((Robot) robot).getPosition();
-//                ((Robot) robot).setPosition(currPosition.x + 1, currPosition.y);
                 ((Robot) robot).setPosition(currPosition.x, currPosition.y + 1);
             }
         },
@@ -46,10 +40,8 @@ public class Robot extends GridAgent<Executable> {
             @Override
             public void execute(
                     Object robot) {
-//                System.out.println("[Robot.java] Action: " + this.toString());
                 ((Robot) robot).setLooking(LookDirection.WEST);
                 Point currPosition = ((Robot) robot).getPosition();
-//                ((Robot) robot).setPosition(currPosition.x - 1, currPosition.y);
                 ((Robot) robot).setPosition(currPosition.x, currPosition.y - 1);
             }
         },
@@ -63,29 +55,6 @@ public class Robot extends GridAgent<Executable> {
             System.out.println("NOT IMPLEMENTED");
         }
     }
-
-//    public enum Labels {
-//        Wall_NW,
-//        Not_Wall_NW,
-//        Wall_N,
-//        Not_Wall_N,
-//        Wall_NE,
-//        Not_Wall_NE,
-//        Wall_W,
-//        Not_Wall_W,
-//        Wall_E,
-//        Not_Wall_E,
-//        Wall_SW,
-//        Not_Wall_SW,
-//        Wall_S,
-//        Not_Wall_S,
-//        Wall_SE,
-//        Not_Wall_SE,
-//        Looking_North,
-//        Looking_East,
-//        Looking_South,
-//        Looking_West
-//    };
     
     public enum Labels {
         Wall_NW,
